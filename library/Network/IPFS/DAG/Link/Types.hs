@@ -1,6 +1,6 @@
 module Network.IPFS.DAG.Link.Types (Link (..)) where
 
-import Network.Prelude
+import Network.IPFS.Prelude
 import Network.IPFS.Types as IPFS
 import Data.Text as T
 

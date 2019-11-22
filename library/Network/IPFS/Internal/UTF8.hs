@@ -1,5 +1,5 @@
 -- | UTF8 text helpers
-module Network.Internal.UTF8
+module Network.IPFS.Internal.UTF8
   ( Textable (..)
   , stripN
   , textToLazyBS

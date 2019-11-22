@@ -1,6 +1,6 @@
 module Network.IPFS.DAG.Link (create) where
 
-import           Network.Prelude
+import           Network.IPFS.Prelude
 
 import           Network.IPFS.Error          as IPFS.Error
 import           Network.IPFS.Types          as IPFS

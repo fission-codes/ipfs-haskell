@@ -5,7 +5,7 @@ import qualified RIO.Text as Text
 import Servant
 import Data.Swagger (ToParamSchema, ToSchema (..))
 
-import Network.Prelude
+import Network.IPFS.Prelude
 
 newtype Name = Name { unName :: String }
   deriving          ( Eq

@@ -1,5 +1,5 @@
 -- | Application configuration and top-level 'RIO' helpers
-module Network.Config
+module Network.IPFS.Config
   ( get
   ) where
 

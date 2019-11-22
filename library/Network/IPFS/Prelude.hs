@@ -1,10 +1,10 @@
 -- | A custom @Prelude@-like module for this project
-module Network.Prelude
+module Network.IPFS.Prelude
   ( module Control.Lens
   , module Data.Aeson
   , module Data.Has
   , module Data.Maybe
-  , module Network.Internal.Constraint
+  , module Network.IPFS.Internal.Constraint
   , module Flow
   , module RIO
   , module RIO.Process
@@ -21,9 +21,9 @@ import Control.Lens                ((%~), (.~), (?~), (^?))
 import Data.Aeson
 import Data.Has
 import Data.Maybe
-import Network.Internal.Constraint
+import Network.IPFS.Internal.Constraint
 
--- import Network.Internal.UTF8       (putText, putTextLn, textShow)
+-- import Network.IPFS.Internal.UTF8       (putText, putTextLn, textShow)
 import Flow
 import RIO                         hiding (Handler, id, timeout, ($), (&))
 import RIO.List                    (headMaybe, intercalate)

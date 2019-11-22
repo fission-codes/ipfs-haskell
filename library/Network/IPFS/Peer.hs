@@ -13,8 +13,8 @@ import qualified RIO.List            as List
 import qualified Net.IPv4 as IPv4
 import           Text.Regex
 
-import           Network.Prelude hiding (all)
-import qualified Network.Internal.UTF8       as UTF8
+import           Network.IPFS.Prelude hiding (all)
+import qualified Network.IPFS.Internal.UTF8       as UTF8
 
 import qualified Network.IPFS.Process        as IPFSProc
 import qualified Network.IPFS.Types          as IPFS

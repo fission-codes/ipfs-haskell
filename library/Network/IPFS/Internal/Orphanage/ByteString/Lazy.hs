@@ -1,11 +1,11 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module Network.Internal.Orphanage.ByteString.Lazy () where
+module Network.IPFS.Internal.Orphanage.ByteString.Lazy () where
 
 import qualified RIO.ByteString.Lazy as Lazy
 import           Servant
 
-import           Network.Prelude
+import           Network.IPFS.Prelude
 
 instance MimeRender PlainText Lazy.ByteString where
   mimeRender _proxy = identity

@@ -12,7 +12,7 @@ maintainer:
 copyright: © 2019 Fission Internet Software Services for Open Networks Inc.
 license: AGPL-3.0-or-later
 license-file: LICENSE
-github: fission-suite/web-api
+github: fission-suite/ipfs-haskell
 tested-with: GHC==8.6.5
 extra-source-files:
   - README.md
@@ -114,29 +114,29 @@ tests:
       - QuickCheck
       - yaml
 
-  fission-test:
-    main: Main.hs
-    source-dirs:
-      - library
-      - test
-      - test/testsuite
-    ghc-options:
-      - -fhpc
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-    dependencies:
-      - aeson
-      - hspec
-      - hspec-wai
-      - hspec-wai-json
-      - fission-web-api
-      - tasty
-      - tasty-hunit
-      - tasty-hspec
-      - tasty-smallcheck
-      - tasty-rerun
-      - transformers
+  # fission-test:
+  #   main: Main.hs
+  #   source-dirs:
+  #     - library
+  #     - test
+  #     - test/testsuite
+  #   ghc-options:
+  #     - -fhpc
+  #     - -threaded
+  #     - -rtsopts
+  #     - -with-rtsopts=-N
+  #   dependencies:
+  #     - aeson
+  #     - hspec
+  #     - hspec-wai
+  #     - hspec-wai-json
+  #     - fission-web-api
+  #     - tasty
+  #     - tasty-hunit
+  #     - tasty-hspec
+  #     - tasty-smallcheck
+  #     - tasty-rerun
+  #     - transformers
 
   # fission-coverage-code:
   #   main: Main.hs
@@ -158,23 +158,23 @@ tests:
   #     - process
   #     - regex-compat
 
-  fission-lint:
-    main: Main.hs
-    source-dirs: test/lint
-    dependencies:
-      - base
-      - hlint
-      - rio
+  # fission-lint:
+  #   main: Main.hs
+  #   source-dirs: test/lint
+  #   dependencies:
+  #     - base
+  #     - hlint
+  #     - rio
 
-benchmarks:
-  fission-benchmark:
-    main: Main.hs
-    source-dirs: benchmark
-    ghc-options:
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-      - -O2
-    dependencies:
-      - criterion
-      - fission-web-api
+# benchmarks:
+#   fission-benchmark:
+#     main: Main.hs
+#     source-dirs: benchmark
+#     ghc-options:
+#       - -threaded
+#       - -rtsopts
+#       - -with-rtsopts=-N
+#       - -O2
+#     dependencies:
+#       - criterion
+#       - fission-web-api

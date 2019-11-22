@@ -1,6 +1,6 @@
 module Network.IPFS.Gateway.Types (Gateway (..)) where
 
-import           Network.Prelude
+import           Network.IPFS.Prelude
 import           Data.Swagger (ToSchema (..))
 
 -- | Type safety wrapper for IPFS Gateway

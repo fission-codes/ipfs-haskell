@@ -2,7 +2,7 @@ module Network.IPFS.Peer.Error (Error (..)) where
 
 import Servant.Server
 
-import Network.Prelude
+import Network.IPFS.Prelude
 import Network.IPFS.ServerError
 import Network.IPFS.Peer.Types
 

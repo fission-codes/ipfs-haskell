@@ -12,11 +12,11 @@ import qualified RIO.ByteString.Lazy as Lazy
 import           Servant
 import           Servant.Client
 
-import           Network.Prelude
-import qualified Network.Config as Config
-import           Network.Internal.Orphanage.ByteString.Lazy ()
+import           Network.IPFS.Prelude
+import qualified Network.IPFS.Config as Config
+import           Network.IPFS.Internal.Orphanage.ByteString.Lazy ()
 
-import qualified Network.File.Types      as File
+import qualified Network.IPFS.File.Types      as File
 import qualified Network.IPFS.Types      as IPFS
 import           Network.IPFS.CID.Types
 

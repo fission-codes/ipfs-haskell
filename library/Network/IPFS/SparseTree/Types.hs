@@ -10,8 +10,8 @@ import qualified RIO.Text    as Text
 import Data.Swagger hiding (Tag, name)
 import Servant
 
-import           Network.Prelude
-import qualified Network.Internal.UTF8 as UTF8
+import           Network.IPFS.Prelude
+import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Network.IPFS.CID.Types
 import           Network.IPFS.Name.Types
 

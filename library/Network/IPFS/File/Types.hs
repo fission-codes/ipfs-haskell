@@ -1,12 +1,12 @@
 -- | File types
-module Network.File.Types (Serialized (..)) where
+module Network.IPFS.File.Types (Serialized (..)) where
 
 import qualified Data.ByteString.Builder as Builder
 import           Data.Swagger
 import           Servant
 import qualified RIO.ByteString.Lazy as Lazy
 
-import Network.Prelude
+import Network.IPFS.Prelude
 
 -- | A file serialized as a lazy bytestring
 newtype Serialized = Serialized { unserialize :: Lazy.ByteString }

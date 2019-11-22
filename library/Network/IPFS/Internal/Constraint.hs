@@ -1,4 +1,4 @@
-module Network.Internal.Constraint (MonadRIO) where
+module Network.IPFS.Internal.Constraint (MonadRIO) where
 
 import RIO
 

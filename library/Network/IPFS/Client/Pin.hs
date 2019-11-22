@@ -7,7 +7,7 @@ module Network.IPFS.Client.Pin
 
 import Servant
 
-import           Network.Prelude
+import           Network.IPFS.Prelude
 import           Network.IPFS.CID.Types
 import qualified Network.IPFS.Client.Param as Param
 

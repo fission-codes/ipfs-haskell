@@ -3,16 +3,16 @@ module Network.IPFS.Get
   , getFileOrDirectory
   ) where
 
-import           Network.Prelude
-import           Network.Internal.Process
-import qualified Network.Internal.UTF8       as UTF8
+import           Network.IPFS.Prelude
+import           Network.IPFS.Internal.Process
+import qualified Network.IPFS.Internal.UTF8       as UTF8
 
 import           Data.ByteString.Lazy.Char8 as CL
 import qualified RIO.ByteString.Lazy as Lazy
 import qualified RIO.Text as Text
 
-import qualified Network.Config              as Config
-import qualified Network.File.Types          as File
+import qualified Network.IPFS.Config              as Config
+import qualified Network.IPFS.File.Types          as File
 import qualified Network.IPFS.Process        as IPFS.Proc
 import           Network.IPFS.Error          as IPFS.Error
 import           Network.IPFS.Types          as IPFS

@@ -1,10 +1,10 @@
-module Network.Internal.Process
+module Network.IPFS.Internal.Process
   ( RIOProc
   , StreamIn
   , StreamOut
   ) where
 
-import Network.Prelude
+import Network.IPFS.Prelude
 
 type RIOProc cfg m = ( MonadRIO          cfg m
                      , HasProcessContext cfg

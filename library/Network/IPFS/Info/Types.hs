@@ -1,6 +1,6 @@
 module Network.IPFS.Info.Types (Info (..)) where
 
-import Network.Prelude
+import Network.IPFS.Prelude
 import Network.IPFS.Peer.Types
 
 data Info = Info

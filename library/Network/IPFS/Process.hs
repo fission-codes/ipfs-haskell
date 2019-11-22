@@ -9,9 +9,9 @@ module Network.IPFS.Process
 
 import qualified RIO.ByteString.Lazy as Lazy
 
-import           Network.Prelude
-import qualified Network.Config as Config
-import           Network.Internal.Process
+import           Network.IPFS.Prelude
+import qualified Network.IPFS.Config as Config
+import           Network.IPFS.Internal.Process
 import           Network.IPFS.Types as IPFS
 
 run :: RIOProc cfg m

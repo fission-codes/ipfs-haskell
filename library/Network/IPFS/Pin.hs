@@ -5,8 +5,8 @@ module Network.IPFS.Pin
 
 import qualified Network.HTTP.Client as HTTP
 
-import           Network.Prelude
-import qualified Network.Internal.UTF8       as UTF8
+import           Network.IPFS.Prelude
+import qualified Network.IPFS.Internal.UTF8       as UTF8
 
 import qualified Network.IPFS.Client.Pin     as Pin
 import           Network.IPFS.Error          as IPFS.Error

@@ -5,8 +5,8 @@ import           Data.List as List
 
 import qualified RIO.ByteString.Lazy as Lazy
 
-import           Network.Prelude
-import qualified Network.Internal.UTF8       as UTF8
+import           Network.IPFS.Prelude
+import qualified Network.IPFS.Internal.UTF8       as UTF8
 
 import qualified Network.IPFS.Process        as IPFS.Proc
 import           Network.IPFS.Error          as IPFS.Error

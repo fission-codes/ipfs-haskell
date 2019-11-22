@@ -5,7 +5,7 @@ module Network.IPFS.Add
   , addDir
   ) where
 
-import Network.Prelude hiding (link)
+import Network.IPFS.Prelude hiding (link)
 
 import           Data.ByteString.Lazy.Char8 as CL
 import           Data.List                  as List
@@ -17,8 +17,8 @@ import           RIO.Directory
 import           RIO.FilePath
 import qualified RIO.ByteString.Lazy as Lazy
 
-import           Network.Internal.Process
-import qualified Network.Internal.UTF8 as UTF8
+import           Network.IPFS.Internal.Process
+import qualified Network.IPFS.Internal.UTF8 as UTF8
 
 import qualified Network.IPFS.Process        as IPFS.Proc
 import           Network.IPFS.Error          as IPFS.Error

@@ -2,8 +2,8 @@ module Network.IPFS.BinPath.Types (BinPath (..)) where
 
 import System.Envy
 
-import Network.Prelude
-import Network.Internal.Orphanage.Natural ()
+import Network.IPFS.Prelude
+import Network.IPFS.Internal.Orphanage.Natural ()
 
 -- | Path to the IPFS binary
 newtype BinPath = BinPath { getBinPath :: FilePath }

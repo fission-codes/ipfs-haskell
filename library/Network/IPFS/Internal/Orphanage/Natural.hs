@@ -1,11 +1,11 @@
 {-# OPTIONS_GHC -fno-warn-orphans         #-}
 {-# OPTIONS_GHC -fno-warn-missing-methods #-}
 
-module Network.Internal.Orphanage.Natural () where
+module Network.IPFS.Internal.Orphanage.Natural () where
 
 import System.Envy
 
-import Network.Prelude
+import Network.IPFS.Prelude
 
 instance Display Natural where
   display nat = display (fromIntegral nat :: Integer)

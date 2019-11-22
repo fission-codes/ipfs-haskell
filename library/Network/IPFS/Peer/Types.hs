@@ -7,7 +7,7 @@ import Data.Aeson
 import Data.Swagger
 import Servant
 
-import qualified Network.Internal.UTF8 as UTF8
+import qualified Network.IPFS.Internal.UTF8 as UTF8
 
 newtype Peer = Peer { peer :: Text }
   deriving          ( Eq

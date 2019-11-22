@@ -3,9 +3,9 @@ module Network.IPFS.DAG
   , putNode
   ) where
 
-import Network.Prelude
+import Network.IPFS.Prelude
 
-import qualified Network.Internal.UTF8 as UTF8
+import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Data.ByteString.Lazy.Char8 as CL
 import qualified RIO.ByteString.Lazy as Lazy
 

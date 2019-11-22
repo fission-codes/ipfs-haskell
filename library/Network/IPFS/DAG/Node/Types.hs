@@ -1,6 +1,6 @@
 module Network.IPFS.DAG.Node.Types (Node (..)) where
 
-import Network.Prelude
+import Network.IPFS.Prelude
 
 import Data.Vector
 import Network.IPFS.DAG.Link.Types as DAG

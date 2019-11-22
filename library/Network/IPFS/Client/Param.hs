@@ -4,7 +4,7 @@ module Network.IPFS.Client.Param
   ) where
 
 import Servant
-import Network.Prelude
+import Network.IPFS.Prelude
 
 type CID = QueryParam' '[Required, Strict] "arg" Text
 type IsRecursive = QueryFlag "recursive"

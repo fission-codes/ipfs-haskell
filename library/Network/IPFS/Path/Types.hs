@@ -3,8 +3,8 @@ module Network.IPFS.Path.Types (Path (..)) where
 import Data.Swagger (ToSchema (..))
 import Servant
 
-import           Network.Prelude
-import qualified Network.Internal.UTF8 as UTF8
+import           Network.IPFS.Prelude
+import qualified Network.IPFS.Internal.UTF8 as UTF8
 
 -- | CID path
 --

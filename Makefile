@@ -1,4 +1,4 @@
-package = fission-web-api
+package = ipfs
 
 stack_yaml = STACK_YAML="stack.yaml"
 stack = $(stack_yaml) stack
@@ -31,7 +31,7 @@ bench:
 	$(stack) build --fast --bench $(package)
 
 dev:
-	$(stack) exec -- ghcid -c "stack ghci $(package):lib --test --main-is $(package):fission-web"
+	$(stack) exec -- ghcid -c "stack ghci $(package):lib --test --main-is $(package)"
 
 live:
 	$(stack) exec -- yesod devel

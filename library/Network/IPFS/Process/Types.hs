@@ -1,5 +1,5 @@
 module Network.IPFS.Process.Types (Opt) where
 
-import Network.Prelude
+import Network.IPFS.Prelude
 
 type Opt = String

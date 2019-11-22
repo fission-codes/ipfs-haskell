@@ -2,8 +2,8 @@ module Network.IPFS.Timeout.Types (Timeout (..)) where
 
 import System.Envy
 
-import Network.Prelude
-import Network.Internal.Orphanage.Natural ()
+import Network.IPFS.Prelude
+import Network.IPFS.Internal.Orphanage.Natural ()
 
 newtype Timeout = Timeout { getSeconds :: Natural }
   deriving          ( Eq
