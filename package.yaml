@@ -1,0 +1,180 @@
+name: ipfs
+version: '1.0.0'
+category: API
+author:
+  - Brooklyn Zelenka
+  - Daniel Holmgren
+  - Ben Church
+maintainer:
+  - brooklyn@fission.codes
+  - daniel@fission.codes
+  - ben@fission.codes
+copyright: © 2019 Fission Internet Software Services for Open Networks Inc.
+license: AGPL-3.0-or-later
+license-file: LICENSE
+github: fission-suite/web-api
+tested-with: GHC==8.6.5
+extra-source-files:
+  - README.md
+
+ghc-options:
+  - -Wall
+  - -Wcompat
+  - -Widentities
+  # Warn about too little
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wmissing-export-lists
+  - -Wpartial-fields
+  # Warn about too much
+  - -Wredundant-constraints
+  # Prettier Development
+  - -fhide-source-paths
+
+default-extensions:
+  - ApplicativeDo
+  - BangPatterns
+  - BinaryLiterals
+  - BlockArguments
+  - ConstraintKinds
+  - DataKinds
+  - DeriveAnyClass
+  - DeriveFoldable
+  - DeriveFunctor
+  - DeriveGeneric
+  - DeriveLift
+  - DeriveTraversable
+  - DerivingStrategies
+  - DuplicateRecordFields
+  - FlexibleContexts
+  - FlexibleInstances
+  - FunctionalDependencies
+  - GADTs
+  - GeneralizedNewtypeDeriving
+  - KindSignatures
+  - LambdaCase
+  - LiberalTypeSynonyms
+  - MultiParamTypeClasses
+  - MultiWayIf
+  - NamedFieldPuns
+  - NoImplicitPrelude
+  - NoMonomorphismRestriction
+  - OverloadedStrings
+  - OverloadedLabels
+  - OverloadedLists
+  - PostfixOperators
+  - RankNTypes
+  - RecordWildCards
+  - ScopedTypeVariables
+  - StandaloneDeriving
+  - TupleSections
+  - TypeApplications
+  - TypeFamilies
+  - TypeSynonymInstances
+  - TemplateHaskell
+  - TypeOperators
+  - ViewPatterns
+
+dependencies:
+  - aeson
+  - base
+  - bytestring
+  - data-has
+  - envy
+  - flow
+  - Glob
+  - http-client
+  - ip
+  - lens
+  - regex-compat
+  - rio
+  - servant-client
+  - servant-server
+  - swagger2
+  - text
+  - vector
+
+library:
+  source-dirs: library
+
+tests:
+  fission-doctest:
+    main: Main.hs
+    source-dirs: test/doctest
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - directory
+      - directory-tree
+      - doctest
+      - Glob
+      - lens-aeson
+      - QuickCheck
+      - yaml
+
+  fission-test:
+    main: Main.hs
+    source-dirs:
+      - library
+      - test
+      - test/testsuite
+    ghc-options:
+      - -fhpc
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - aeson
+      - hspec
+      - hspec-wai
+      - hspec-wai-json
+      - fission-web-api
+      - tasty
+      - tasty-hunit
+      - tasty-hspec
+      - tasty-smallcheck
+      - tasty-rerun
+      - transformers
+
+  # fission-coverage-code:
+  #   main: Main.hs
+  #   source-dirs: test/code-coverage
+  #   ghc-options:
+  #     - -fhpc
+  #   dependencies:
+  #     - base
+  #     - fission-web-api
+  #     - process
+  #     - regex-compat
+
+  # fission-coverage-docs:
+  #   main: Main.hs
+  #   source-dirs: test/doc-coverage
+  #   dependencies:
+  #     - doctest
+  #     - fission-web-api
+  #     - process
+  #     - regex-compat
+
+  fission-lint:
+    main: Main.hs
+    source-dirs: test/lint
+    dependencies:
+      - base
+      - hlint
+      - rio
+
+benchmarks:
+  fission-benchmark:
+    main: Main.hs
+    source-dirs: benchmark
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -O2
+    dependencies:
+      - criterion
+      - fission-web-api
