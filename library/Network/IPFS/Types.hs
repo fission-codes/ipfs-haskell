@@ -5,6 +5,7 @@ module Network.IPFS.Types
   , mkCID
   , Name (..)
   , Opt
+  , Command
   , Peer (..)
   , Path (..)
   , SparseTree (..)

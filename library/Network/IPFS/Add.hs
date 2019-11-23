@@ -6,42 +6,32 @@ module Network.IPFS.Add
   ) where
 
 import Network.IPFS.Prelude hiding (link)
+import           Network.IPFS.Class
 
 import           Data.ByteString.Lazy.Char8 as CL
 import           Data.List                  as List
 
-import qualified Network.HTTP.Client  as HTTP
 import qualified System.FilePath.Glob as Glob
 
 import           RIO.Directory
 import           RIO.FilePath
 import qualified RIO.ByteString.Lazy as Lazy
 
-import           Network.IPFS.Internal.Process
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 
-import qualified Network.IPFS.Process        as IPFS.Proc
 import           Network.IPFS.Error          as IPFS.Error
 import           Network.IPFS.Types          as IPFS
 import           Network.IPFS.DAG.Node.Types as DAG
 import           Network.IPFS.DAG.Link       as DAG.Link
 
 import           Network.IPFS.DAG as DAG
-import qualified Network.IPFS.Pin as IPFS.Pin
 
 addRaw ::
-  ( MonadRIO          cfg m
-  , HasProcessContext cfg
-  , HasLogFunc        cfg
-  , Has HTTP.Manager  cfg
-  , Has IPFS.URL      cfg
-  , Has IPFS.BinPath  cfg
-  , Has IPFS.Timeout  cfg
-  )
+  MonadLocalIPFS m
   => Lazy.ByteString
   -> m (Either IPFS.Error.Add IPFS.CID)
 addRaw raw =
-  IPFS.Proc.run ["add", "-HQ"] raw >>= \case
+  ipfsRun ["add", "-HQ"] raw >>= \case
     (ExitSuccess, result, _) ->
       case CL.lines result of
         [cid] ->
@@ -49,7 +39,8 @@ addRaw raw =
             |> UTF8.textShow
             |> UTF8.stripN 1
             |> mkCID
-            |> IPFS.Pin.add
+            |> Right
+            |> return
 
         bad ->
           return . Left . UnexpectedOutput <| UTF8.textShow bad
@@ -58,38 +49,26 @@ addRaw raw =
       return . Left . UnknownAddErr <| UTF8.textShow err
 
 addFile ::
-  ( MonadRIO          cfg m
-  , HasProcessContext cfg
-  , HasLogFunc        cfg
-  , Has HTTP.Manager  cfg
-  , Has IPFS.URL      cfg
-  , Has IPFS.BinPath  cfg
-  , Has IPFS.Timeout  cfg
-  )
+  MonadLocalIPFS m
   => Lazy.ByteString
   -> IPFS.Name
   -> m (Either IPFS.Error.Add IPFS.SparseTree)
 addFile raw name =
-  IPFS.Proc.run opts raw >>= \case
+  ipfsRun opts raw >>= \case
     (ExitSuccess, result, _) ->
-      IPFS.Pin.add (mkCID <| UTF8.textShow result) >>= \case
-        Left err ->
-          return . Left . UnknownAddErr <| UTF8.textShow err
+      case CL.lines result of
+        [inner, outer] ->
+          let
+            sparseTree  = Directory [(Hash rootCID, fileWrapper)]
+            fileWrapper = Directory [(fileName, Content fileCID)]
+            rootCID     = CID <| UTF8.textShow outer
+            fileCID     = CID . UTF8.stripN 1 <| UTF8.textShow inner
+            fileName    = Key name
+          in
+            return <| Right sparseTree
 
-        Right _ ->
-          case CL.lines result of
-            [inner, outer] ->
-              let
-                sparseTree  = Directory [(Hash rootCID, fileWrapper)]
-                fileWrapper = Directory [(fileName, Content fileCID)]
-                rootCID     = CID <| UTF8.textShow outer
-                fileCID     = CID . UTF8.stripN 1 <| UTF8.textShow inner
-                fileName    = Key name
-              in
-                return <| Right sparseTree
-
-            bad ->
-              return . Left . UnexpectedOutput <| UTF8.textShow bad
+        bad ->
+          return . Left . UnexpectedOutput <| UTF8.textShow bad
 
 
     (ExitFailure _, _, err) ->
@@ -103,13 +82,10 @@ addFile raw name =
              ]
 
 addPath ::
-  ( RIOProc           cfg m
-  , Has IPFS.Timeout  cfg
-  , Has IPFS.BinPath  cfg
-  )
+  MonadLocalIPFS m
   => FilePath
   -> m (Either IPFS.Error.Add CID)
-addPath path = IPFS.Proc.run ["add", "-HQ", path] "" >>= pure . \case
+addPath path = ipfsRun ["add", "-HQ", path] "" >>= pure . \case
     (ExitSuccess, result, _) ->
       case CL.lines result of
         [cid] -> Right . mkCID . UTF8.stripN 1 <| UTF8.textShow cid
@@ -119,11 +95,8 @@ addPath path = IPFS.Proc.run ["add", "-HQ", path] "" >>= pure . \case
       Left . UnknownAddErr <| UTF8.textShow err
 
 addDir ::
-  ( MonadRIO cfg m
-  , HasProcessContext cfg
-  , HasLogFunc cfg
-  , Has IPFS.BinPath cfg
-  , Has IPFS.Timeout cfg
+  ( MonadIO m
+  , MonadLocalIPFS m
   )
   => IPFS.Ignored
   -> FilePath
@@ -133,11 +106,8 @@ addDir ignored path = doesFileExist path >>= \case
   False -> walkDir ignored path
 
 walkDir ::
-  ( MonadRIO cfg m
-  , HasProcessContext cfg
-  , HasLogFunc cfg
-  , Has IPFS.BinPath cfg
-  , Has IPFS.Timeout cfg
+  ( MonadIO m
+  , MonadLocalIPFS m
   )
   => IPFS.Ignored
   -> FilePath
@@ -158,11 +128,8 @@ walkDir ignored path = do
     Right node -> DAG.putNode node
 
 foldResults ::
-  ( MonadRIO cfg m
-  , HasProcessContext cfg
-  , HasLogFunc cfg
-  , Has IPFS.BinPath cfg
-  , Has IPFS.Timeout cfg
+  ( MonadIO m
+  , MonadLocalIPFS m
   )
   => FilePath
   -> IPFS.Ignored

@@ -1,10 +1,6 @@
 module Network.IPFS.Process
   ( run
   , run'
-  , run_
-  , runExitCode
-  , runErr
-  , runErr'
   ) where
 
 import qualified RIO.ByteString.Lazy as Lazy
@@ -29,14 +25,6 @@ run' :: RIOProc cfg m
      -> m (ExitCode, Lazy.ByteString, Lazy.ByteString)
 run' = runBS createPipe
 
-run_ :: RIOProc          cfg m
-     => Has IPFS.BinPath cfg
-     => Has IPFS.Timeout cfg
-     => [Opt]
-     -> Lazy.ByteString
-     -> m ExitCode
-run_ opts arg = runExitCode (byteStringInput arg) opts
-
 runBS :: RIOProc cfg m
       => Has IPFS.BinPath cfg
       => Has IPFS.Timeout cfg
@@ -44,30 +32,6 @@ runBS :: RIOProc cfg m
       -> [Opt]
       -> m (ExitCode, Lazy.ByteString, Lazy.ByteString)
 runBS inStream = ipfsProc readProcess inStream byteStringOutput
-
-runExitCode :: RIOProc          cfg m
-            => Has IPFS.BinPath cfg
-            => Has IPFS.Timeout cfg
-            => StreamIn stdin
-            -> [Opt]
-            -> m ExitCode
-runExitCode inStream = ipfsProc runProcess inStream createPipe
-
-runErr' :: RIOProc        cfg m
-      => Has BinPath      cfg
-      => Has IPFS.Timeout cfg
-      => [Opt]
-      -> Lazy.ByteString
-      -> m (ExitCode, Lazy.ByteString)
-runErr' opts arg = runErr (byteStringInput arg) opts
-
-runErr :: RIOProc cfg m
-       => Has BinPath cfg
-       => Has IPFS.Timeout cfg
-       => StreamIn stdin
-       -> [Opt]
-       -> m (ExitCode, Lazy.ByteString)
-runErr inStream = ipfsProc readProcessStderr inStream byteStringOutput
 
 ipfsProc :: RIOProc          cfg m
          => Has IPFS.BinPath cfg

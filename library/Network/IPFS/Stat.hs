@@ -6,22 +6,17 @@ import           Data.List as List
 import qualified RIO.ByteString.Lazy as Lazy
 
 import           Network.IPFS.Prelude
+import           Network.IPFS.Class
 import qualified Network.IPFS.Internal.UTF8       as UTF8
 
-import qualified Network.IPFS.Process        as IPFS.Proc
 import           Network.IPFS.Error          as IPFS.Error
 import           Network.IPFS.Types          as IPFS
 
 getSize ::
-  ( MonadRIO cfg m
-  , HasProcessContext cfg
-  , HasLogFunc cfg
-  , Has IPFS.BinPath cfg
-  , Has IPFS.Timeout cfg
-  )
+  MonadLocalIPFS m
   => IPFS.CID
   -> m (Either IPFS.Error.Add Integer)
-getSize (CID hash) = IPFS.Proc.run ["object", "stat"] (Lazy.fromStrict <| encodeUtf8 hash) >>= \case
+getSize (CID hash) = ipfsRun ["object", "stat"] (Lazy.fromStrict <| encodeUtf8 hash) >>= \case
   (ExitSuccess, result, _) -> do
     case parseSize result of
       Nothing -> return . Left . UnexpectedOutput <| "Could not parse CumulativeSize"

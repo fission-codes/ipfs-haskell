@@ -4,6 +4,7 @@ module Network.IPFS.Get
   ) where
 
 import           Network.IPFS.Prelude
+import           Network.IPFS.Class
 import           Network.IPFS.Internal.Process
 import qualified Network.IPFS.Internal.UTF8       as UTF8
 
@@ -13,18 +14,15 @@ import qualified RIO.Text as Text
 
 import qualified Network.IPFS.Config              as Config
 import qualified Network.IPFS.File.Types          as File
-import qualified Network.IPFS.Process        as IPFS.Proc
 import           Network.IPFS.Error          as IPFS.Error
 import           Network.IPFS.Types          as IPFS
 
 getFileOrDirectory ::
-  ( RIOProc           cfg m
-  , Has IPFS.Timeout  cfg
-  , Has IPFS.BinPath  cfg
-  )
+  MonadLocalIPFS m
   => IPFS.CID
   -> m (Either IPFS.Error.Get CL.ByteString)
-getFileOrDirectory (IPFS.CID hash) = IPFS.Proc.run ["get", Text.unpack hash] "" >>= \case
+-- getFileOrDirectory (IPFS.CID hash) = IPFS.Proc.run ["get", Text.unpack hash] "" >>= \case
+getFileOrDirectory (IPFS.CID hash) = ipfsRun ["get", Text.unpack hash] "" >>= \case
   (ExitSuccess, contents, _) ->
     return <| Right contents
 
@@ -33,12 +31,12 @@ getFileOrDirectory (IPFS.CID hash) = IPFS.Proc.run ["get", Text.unpack hash] "" 
 
 getFile ::
   ( RIOProc           cfg m
-  , Has IPFS.BinPath  cfg
-  , Has IPFS.Timeout  cfg
+  , MonadLocalIPFS        m
+  , Has IPFS.Timeout cfg
   )
   => IPFS.CID
   -> m (Either IPFS.Error.Get File.Serialized)
-getFile cid@(IPFS.CID hash) = IPFS.Proc.run ["cat"] (UTF8.textToLazyBS hash) >>= \case
+getFile cid@(IPFS.CID hash) = ipfsRun ["cat"] (UTF8.textToLazyBS hash) >>= \case
   (ExitSuccess, contents, _) ->
     return . Right <| File.Serialized contents
 
