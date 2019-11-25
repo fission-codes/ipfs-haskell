@@ -4,7 +4,7 @@ module Network.IPFS.DAG
   ) where
 
 import Network.IPFS.Prelude
-import Network.IPFS.Class
+import Network.IPFS.Local.Class
 
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Data.ByteString.Lazy.Char8 as CL

@@ -3,21 +3,17 @@ module Network.IPFS.Client
   , add
   , cat
   , pin
-  , run
   , unpin
   ) where
 
-import qualified Network.HTTP.Client as HTTP
 import qualified RIO.ByteString.Lazy as Lazy
 import           Servant
 import           Servant.Client
 
 import           Network.IPFS.Prelude
-import qualified Network.IPFS.Config as Config
 import           Network.IPFS.Internal.Orphanage.ByteString.Lazy ()
 
 import qualified Network.IPFS.File.Types      as File
-import qualified Network.IPFS.Types      as IPFS
 import           Network.IPFS.CID.Types
 
 import qualified Network.IPFS.Client.Add as Add
@@ -41,20 +37,3 @@ unpin :: Text -> Bool    -> ClientM Pin.Response
 add :<|> cat
     :<|> pin
     :<|> unpin = client <| Proxy @API
-
--- NOTE: May want to move these to streaming in the future
-run
-  :: ( MonadRIO         cfg m
-     , Has IPFS.URL     cfg
-     , Has HTTP.Manager cfg
-     )
-  => ClientM a
-  -> m (Either ClientError a)
-run query = do
-  IPFS.URL url            <- Config.get
-  manager :: HTTP.Manager <- Config.get
-
-  url
-    |> mkClientEnv manager
-    |> runClientM query
-    |> liftIO

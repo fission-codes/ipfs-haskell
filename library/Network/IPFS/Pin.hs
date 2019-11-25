@@ -3,25 +3,22 @@ module Network.IPFS.Pin
   , rm
   ) where
 
-import qualified Network.HTTP.Client as HTTP
-
 import           Network.IPFS.Prelude
+import           Network.IPFS.Remote.Class
 import qualified Network.IPFS.Internal.UTF8       as UTF8
 
 import qualified Network.IPFS.Client.Pin     as Pin
 import           Network.IPFS.Error          as IPFS.Error
 import           Network.IPFS.Types          as IPFS
-import qualified Network.IPFS.Client         as IPFS.Client
 
-add
-  :: ( MonadRIO          cfg m
-     , HasLogFunc        cfg
-     , Has HTTP.Manager  cfg
-     , Has IPFS.URL      cfg
-     )
+add ::
+  ( MonadRIO        cfg m
+  , MonadRemoteIPFS     m
+  , HasLogFunc      cfg
+  )
   => IPFS.CID
   -> m (Either IPFS.Error.Add CID)
-add (CID hash) = IPFS.Client.run (IPFS.Client.pin hash) >>= \case
+add (CID hash) = ipfsPin hash >>= \case
   Right Pin.Response { cids } ->
     case cids of
       [cid] -> do
@@ -35,15 +32,14 @@ add (CID hash) = IPFS.Client.run (IPFS.Client.pin hash) >>= \case
     logLeft err
 
 -- | Unpin a CID
-rm
-  :: ( MonadRIO          cfg m
-     , Has HTTP.Manager  cfg
-     , Has IPFS.URL      cfg
-     , HasLogFunc        cfg
-     )
+rm ::
+  ( MonadRIO        cfg m
+  , MonadRemoteIPFS     m
+  , HasLogFunc      cfg
+  )
   => IPFS.CID
   -> m (Either IPFS.Error.Add CID)
-rm cid@(CID hash) = IPFS.Client.run (IPFS.Client.unpin hash False) >>= \case
+rm cid@(CID hash) = ipfsUnpin hash False >>= \case
   Right Pin.Response { cids } ->
     case cids of
       [cid'] -> do

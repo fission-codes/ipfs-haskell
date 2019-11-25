@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Network.IPFS.Class
+module Network.IPFS.Local.Class
   ( MonadLocalIPFS
   , withIPFSProc
   , ipfsRun

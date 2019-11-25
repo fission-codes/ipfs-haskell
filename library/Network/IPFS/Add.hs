@@ -6,7 +6,7 @@ module Network.IPFS.Add
   ) where
 
 import Network.IPFS.Prelude hiding (link)
-import           Network.IPFS.Class
+import           Network.IPFS.Local.Class
 
 import           Data.ByteString.Lazy.Char8 as CL
 import           Data.List                  as List

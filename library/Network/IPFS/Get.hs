@@ -4,7 +4,7 @@ module Network.IPFS.Get
   ) where
 
 import           Network.IPFS.Prelude
-import           Network.IPFS.Class
+import           Network.IPFS.Local.Class
 import           Network.IPFS.Internal.Process
 import qualified Network.IPFS.Internal.UTF8       as UTF8
 
