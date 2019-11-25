@@ -21,7 +21,6 @@ class Monad m => MonadLocalIPFS m where
                -> m a
   ipfsRun :: [Opt] -> Lazy.ByteString -> m (ExitCode, Lazy.ByteString, Lazy.ByteString)
 
-
 instance 
   ( HasProcessContext cfg
   , HasLogFunc cfg
