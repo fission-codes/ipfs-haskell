@@ -4,7 +4,7 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4edf5c90b5840edce962e1d8d3782d96e9e857577625c0da47d11f79ef84d8b0
+-- hash: d3e51f1448310757ffd1a6db4b9aac88b56d49c157ce393c7f2d9d77294bfec2
 
 name:           ipfs
 version:        1.0.0
@@ -63,7 +63,6 @@ library
       Network.IPFS.Peer.Types
       Network.IPFS.Pin
       Network.IPFS.Prelude
-      Network.IPFS.Process
       Network.IPFS.Process.Error
       Network.IPFS.Process.Types
       Network.IPFS.Remote.Class

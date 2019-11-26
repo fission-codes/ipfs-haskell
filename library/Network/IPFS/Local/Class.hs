@@ -4,13 +4,16 @@ module Network.IPFS.Local.Class
   ( MonadLocalIPFS
   , withIPFSProc
   , ipfsRun
+  , getTimeout
   ) where
 
 import Network.IPFS.Prelude
-import           Network.IPFS.Types as IPFS
+
 import qualified RIO.ByteString.Lazy as Lazy
+
 import qualified Network.IPFS.Config as Config
-import Network.IPFS.Internal.Process
+import           Network.IPFS.Types  as IPFS
+import           Network.IPFS.Internal.Process
 
 class Monad m => MonadLocalIPFS m where
   withIPFSProc ::
@@ -20,6 +23,7 @@ class Monad m => MonadLocalIPFS m where
                -> [Opt]
                -> m a
   ipfsRun  :: [Opt] -> Lazy.ByteString -> m (ExitCode, Lazy.ByteString, Lazy.ByteString)
+  getTimeout :: m IPFS.Timeout
 
 instance 
   ( HasProcessContext cfg
@@ -37,3 +41,5 @@ instance
                       . setStdout outStream
 
     ipfsRun opts arg = withIPFSProc readProcess (byteStringInput arg) byteStringOutput opts
+
+    getTimeout = Config.get
