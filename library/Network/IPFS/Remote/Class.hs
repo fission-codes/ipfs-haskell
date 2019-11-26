@@ -11,10 +11,8 @@ module Network.IPFS.Remote.Class
 import Network.IPFS.Prelude
 
 import           Servant.Client
-import qualified Network.HTTP.Client as HTTP
 import qualified RIO.ByteString.Lazy as Lazy
 
-import qualified Network.IPFS.Config as Config
 import           Network.IPFS.Types as IPFS
 
 import qualified Network.IPFS.Client as IPFS.Client
@@ -32,16 +30,3 @@ class Monad m => MonadRemoteIPFS m where
   ipfsCat cid             = run <| IPFS.Client.cat cid
   ipfsPin cid             = run <| IPFS.Client.pin cid
   ipfsUnpin cid recursive = run <| IPFS.Client.unpin cid recursive
-
-instance 
-  ( Has IPFS.URL cfg
-  , Has HTTP.Manager cfg
-  )
-  => MonadRemoteIPFS (RIO cfg) where
-    run query = do
-      IPFS.URL url            <- Config.get
-      manager :: HTTP.Manager <- Config.get
-      url
-        |> mkClientEnv manager
-        |> runClientM query
-        |> liftIO
