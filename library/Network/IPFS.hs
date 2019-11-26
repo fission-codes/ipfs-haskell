@@ -4,6 +4,7 @@ module Network.IPFS
   , ipfsRun
   , getTimeout
   , MonadRemoteIPFS
+  , run
   , ipfsAdd
   , ipfsCat
   , ipfsPin
