@@ -1,4 +1,4 @@
-module Network.IPFS.ServerError (ToServerError (..)) where
+module Network.IPFS.ToServerError (ToServerError (..)) where
 
 import           Servant.Server
 

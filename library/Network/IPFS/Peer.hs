@@ -16,19 +16,14 @@ import           Text.Regex
 import           Network.IPFS.Prelude hiding (all)
 import qualified Network.IPFS.Internal.UTF8       as UTF8
 
-import qualified Network.IPFS.Process        as IPFSProc
 import qualified Network.IPFS.Types          as IPFS
+import           Network.IPFS.Local.Class
 import           Network.IPFS.Peer.Error     as IPFS.Peer
 import           Network.IPFS.Peer.Types
 import           Network.IPFS.Info.Types
 
-all
-  :: ( MonadRIO          cfg m
-     , HasProcessContext cfg
-     , HasLogFunc        cfg
-     , Has IPFS.BinPath  cfg
-     , Has IPFS.Timeout  cfg
-     )
+all ::
+  MonadLocalIPFS m
   => m (Either IPFS.Peer.Error [IPFS.Peer])
 all = rawList <&> \case
   (ExitSuccess, allRaw, _) ->
@@ -39,26 +34,16 @@ all = rawList <&> \case
   (ExitFailure _, _, err) ->
     Left . UnknownErr <| UTF8.textShow err
 
-rawList
-  :: ( MonadRIO          cfg m
-     , Has IPFS.BinPath  cfg
-     , Has IPFS.Timeout  cfg
-     , HasProcessContext cfg
-     , HasLogFunc        cfg
-     )
+rawList ::
+  MonadLocalIPFS m
   => m (ExitCode, Lazy.ByteString, Lazy.ByteString)
-rawList = IPFSProc.run' ["bootstrap", "list"]
+rawList = ipfsRun ["bootstrap", "list"] ""
 
-connect
-  :: ( MonadRIO cfg m
-     , HasProcessContext cfg
-     , HasLogFunc cfg
-     , Has IPFS.BinPath cfg
-     , Has IPFS.Timeout cfg
-     )
+connect ::
+  MonadLocalIPFS m
   => Peer
   -> m (Either IPFS.Peer.Error ())
-connect peer@(Peer peerID) = IPFSProc.run ["swarm", "connect"] (UTF8.textToLazyBS peerID) >>= pure . \case
+connect peer@(Peer peerID) = ipfsRun ["swarm", "connect"] (UTF8.textToLazyBS peerID) >>= pure . \case
   (ExitFailure _ , _, _) -> Left <| CannotConnect peer
   (ExitSuccess   , _, _) -> Right ()
 
@@ -84,15 +69,10 @@ filterExternalPeers :: [Peer] -> [Peer]
 filterExternalPeers = filter (isExternalIPv4 . peer)
 
 -- | Get all external ipfs peer addresses
-getExternalAddress
-  :: ( MonadRIO          cfg m
-     , HasProcessContext cfg
-     , HasLogFunc        cfg
-     , Has IPFS.BinPath  cfg
-     , Has IPFS.Timeout  cfg
-     )
+getExternalAddress ::
+  MonadLocalIPFS m
   => m (Either IPFS.Peer.Error [Peer])
-getExternalAddress = IPFSProc.run' ["id"] >>= \case
+getExternalAddress = ipfsRun ["id"] "" >>= \case
     (ExitFailure _ , _, err) ->
       return <| Left <| UnknownErr <| UTF8.textShow err
 

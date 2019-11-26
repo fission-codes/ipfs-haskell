@@ -19,7 +19,7 @@ class Monad m => MonadLocalIPFS m where
                -> StreamOut stdout
                -> [Opt]
                -> m a
-  ipfsRun :: [Opt] -> Lazy.ByteString -> m (ExitCode, Lazy.ByteString, Lazy.ByteString)
+  ipfsRun  :: [Opt] -> Lazy.ByteString -> m (ExitCode, Lazy.ByteString, Lazy.ByteString)
 
 instance 
   ( HasProcessContext cfg

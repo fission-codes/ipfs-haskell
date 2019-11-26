@@ -10,7 +10,7 @@ import Servant.Server
 import           Network.IPFS.Prelude
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Network.IPFS.Types
-import           Network.IPFS.ServerError
+import           Network.IPFS.ToServerError
 
 data Error
   = AddErr Add
