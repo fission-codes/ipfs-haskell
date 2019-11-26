@@ -2,6 +2,7 @@
 
 module Network.IPFS.Remote.Class
   ( MonadRemoteIPFS
+  , run
   , ipfsAdd
   , ipfsCat
   , ipfsPin
