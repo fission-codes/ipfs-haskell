@@ -52,7 +52,7 @@ addFile ::
   MonadLocalIPFS m
   => Lazy.ByteString
   -> IPFS.Name
-  -> m (Either IPFS.Error.Add IPFS.SparseTree)
+  -> m (Either IPFS.Error.Add (IPFS.SparseTree, IPFS.CID))
 addFile raw name =
   ipfsRun opts raw >>= \case
     (ExitSuccess, result, _) ->
@@ -65,7 +65,7 @@ addFile raw name =
             fileCID     = CID . UTF8.stripN 1 <| UTF8.textShow inner
             fileName    = Key name
           in
-            return <| Right sparseTree
+            return <| Right (sparseTree, rootCID)
 
         bad ->
           return . Left . UnexpectedOutput <| UTF8.textShow bad
