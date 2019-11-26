@@ -4,7 +4,7 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d3e51f1448310757ffd1a6db4b9aac88b56d49c157ce393c7f2d9d77294bfec2
+-- hash: e6b660661ac720af60d0bfbffbaa8b59ae22dcb86e80634b0d453436d3286b60
 
 name:           ipfs
 version:        1.0.0
@@ -31,6 +31,7 @@ source-repository head
 
 library
   exposed-modules:
+      Network.IPFS
       Network.IPFS.Add
       Network.IPFS.BinPath.Types
       Network.IPFS.CID.Types
