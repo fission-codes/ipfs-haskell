@@ -4,8 +4,8 @@ module Network.IPFS.Get
   ) where
 
 import           Network.IPFS.Prelude
-import           Network.IPFS.Local.Class
-import qualified Network.IPFS.Internal.UTF8       as UTF8
+import           Network.IPFS.Local.Class   as IPFS
+import qualified Network.IPFS.Internal.UTF8 as UTF8
 
 import           Data.ByteString.Lazy.Char8 as CL
 import qualified RIO.ByteString.Lazy as Lazy
@@ -20,7 +20,7 @@ getFileOrDirectory ::
   MonadLocalIPFS m
   => IPFS.CID
   -> m (Either IPFS.Get.Error CL.ByteString)
-getFileOrDirectory cid@(IPFS.CID hash) = ipfsRun ["get", Text.unpack hash] "" >>= \case
+getFileOrDirectory cid@(IPFS.CID hash) = IPFS.runLocal ["get", Text.unpack hash] "" >>= \case
   Right contents -> return <| Right contents
   Left err -> case err of
     Process.Timeout secs -> return . Left <| TimedOut cid secs
@@ -30,7 +30,7 @@ getFile ::
   MonadLocalIPFS m
   => IPFS.CID
   -> m (Either IPFS.Get.Error File.Serialized)
-getFile cid@(IPFS.CID hash) = ipfsRun ["cat"] (UTF8.textToLazyBS hash) >>= \case
+getFile cid@(IPFS.CID hash) = IPFS.runLocal ["cat"] (UTF8.textToLazyBS hash) >>= \case
   Right contents -> return . Right <| File.Serialized contents
   Left err -> case err of
     Process.Timeout secs -> return . Left <| TimedOut cid secs

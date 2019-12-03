@@ -15,10 +15,10 @@ import           Text.Regex
 import           Network.IPFS.Prelude hiding (all)
 import qualified Network.IPFS.Internal.UTF8       as UTF8
 
-import qualified Network.IPFS.Types          as IPFS
+import qualified Network.IPFS.Types         as IPFS
 import qualified Network.IPFS.Process.Error as Process
-import           Network.IPFS.Local.Class
-import           Network.IPFS.Peer.Error     as IPFS.Peer
+import           Network.IPFS.Local.Class   as IPFS
+import           Network.IPFS.Peer.Error    as IPFS.Peer
 import           Network.IPFS.Peer.Types
 import           Network.IPFS.Info.Types
 
@@ -34,13 +34,13 @@ all = rawList <&> \case
 rawList ::
   MonadLocalIPFS m
   => m (Either Process.Error Process.RawMessage)
-rawList = ipfsRun ["bootstrap", "list"] ""
+rawList = IPFS.runLocal ["bootstrap", "list"] ""
 
 connect ::
   MonadLocalIPFS m
   => Peer
   -> m (Either IPFS.Peer.Error ())
-connect peer@(Peer peerID) = ipfsRun ["swarm", "connect"] (UTF8.textToLazyBS peerID) >>= pure . \case
+connect peer@(Peer peerID) = IPFS.runLocal ["swarm", "connect"] (UTF8.textToLazyBS peerID) >>= pure . \case
   Left _ -> Left <| CannotConnect peer
   Right _ -> Right ()
 
@@ -69,7 +69,7 @@ filterExternalPeers = filter (isExternalIPv4 . peer)
 getExternalAddress ::
   MonadLocalIPFS m
   => m (Either IPFS.Peer.Error [Peer])
-getExternalAddress = ipfsRun ["id"] "" >>= \case
+getExternalAddress = IPFS.runLocal ["id"] "" >>= \case
   Left err -> return <| Left <| UnknownErr <| UTF8.textShow err
   Right raw -> do
     raw

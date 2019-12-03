@@ -4,7 +4,7 @@ module Network.IPFS.DAG
   ) where
 
 import Network.IPFS.Prelude
-import Network.IPFS.Local.Class
+import Network.IPFS.Local.Class as IPFS
 
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Data.ByteString.Lazy.Char8 as CL
@@ -18,7 +18,7 @@ put ::
   MonadLocalIPFS m
   => Lazy.ByteString
   -> m (Either IPFS.Add.Error IPFS.CID)
-put raw = ipfsRun ["dag", "put", "-f", "dag-pb"] raw >>= \case
+put raw = IPFS.runLocal ["dag", "put", "-f", "dag-pb"] raw >>= \case
   Right result -> 
     case CL.lines result of
       [cid] ->

@@ -1,6 +1,6 @@
 module Network.IPFS.Local.Class
   ( MonadLocalIPFS
-  , ipfsRun
+  , runLocal
   ) where
 
 import Network.IPFS.Prelude
@@ -11,7 +11,7 @@ import           Network.IPFS.Types         as IPFS
 import qualified Network.IPFS.Process.Error as Process
 
 class Monad m => MonadLocalIPFS m where
-  ipfsRun ::
-    [Opt]
+  runLocal ::
+       [Opt]
     -> Lazy.ByteString
     -> m (Either Process.Error Process.RawMessage)

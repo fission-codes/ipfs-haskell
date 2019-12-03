@@ -5,8 +5,8 @@ module Network.IPFS.Add
   , addDir
   ) where
 
-import Network.IPFS.Prelude hiding (link)
-import           Network.IPFS.Local.Class
+import           Network.IPFS.Prelude hiding (link)
+import           Network.IPFS.Local.Class as IPFS
 
 import           Data.ByteString.Lazy.Char8 as CL
 import           Data.List                  as List
@@ -31,7 +31,7 @@ addRaw ::
   => Lazy.ByteString
   -> m (Either IPFS.Add.Error IPFS.CID)
 addRaw raw =
-  ipfsRun ["add", "-HQ"] raw >>= \case
+  IPFS.runLocal ["add", "-HQ"] raw >>= \case
     Right result ->
       case CL.lines result of
         [cid] ->
@@ -54,7 +54,7 @@ addFile ::
   -> IPFS.Name
   -> m (Either IPFS.Add.Error (IPFS.SparseTree, IPFS.CID))
 addFile raw name =
-  ipfsRun opts raw >>= \case
+  IPFS.runLocal opts raw >>= \case
     Right result ->
       case CL.lines result of
         [inner, outer] ->
@@ -85,7 +85,7 @@ addPath ::
   MonadLocalIPFS m
   => FilePath
   -> m (Either IPFS.Add.Error CID)
-addPath path = ipfsRun ["add", "-HQ", path] "" >>= pure . \case
+addPath path = IPFS.runLocal ["add", "-HQ", path] "" >>= pure . \case
   Right result ->
     case CL.lines result of
       [cid] -> Right . mkCID . UTF8.stripN 1 <| UTF8.textShow cid
