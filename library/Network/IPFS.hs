@@ -2,7 +2,6 @@ module Network.IPFS
   ( MonadLocalIPFS
   , withIPFSProc
   , ipfsRun
-  , getTimeout
   , MonadRemoteIPFS
   , runRemote
   , ipfsAdd
