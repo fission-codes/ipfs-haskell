@@ -16,6 +16,7 @@ import           Network.IPFS.Prelude hiding (all)
 import qualified Network.IPFS.Internal.UTF8       as UTF8
 
 import qualified Network.IPFS.Types          as IPFS
+import qualified Network.IPFS.Process.Error as Process
 import           Network.IPFS.Local.Class
 import           Network.IPFS.Peer.Error     as IPFS.Peer
 import           Network.IPFS.Peer.Types
@@ -32,7 +33,7 @@ all = rawList <&> \case
 
 rawList ::
   MonadLocalIPFS m
-  => m (Either IPFSError RawMessage)
+  => m (Either Process.Error Process.RawMessage)
 rawList = ipfsRun ["bootstrap", "list"] ""
 
 connect ::

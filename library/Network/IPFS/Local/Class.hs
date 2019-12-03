@@ -2,8 +2,6 @@
 
 module Network.IPFS.Local.Class
   ( MonadLocalIPFS
-  , IPFSError (..)
-  , RawMessage
   , withIPFSProc
   , ipfsRun
   ) where
@@ -11,9 +9,9 @@ module Network.IPFS.Local.Class
 import Network.IPFS.Prelude
 
 import qualified RIO.ByteString.Lazy as Lazy
-import           Data.ByteString.Lazy.Char8 as CL
 
-import           Network.IPFS.Types  as IPFS
+import           Network.IPFS.Types         as IPFS
+import qualified Network.IPFS.Process.Error as Process
 import           Network.IPFS.Internal.Process
 
 import           Network.IPFS.Config  as Config
@@ -28,7 +26,7 @@ class Monad m => MonadLocalIPFS m where
   ipfsRun ::
     [Opt]
     -> Lazy.ByteString
-    -> m (Either IPFSError RawMessage)
+    -> m (Either Process.Error Process.RawMessage)
 
 instance 
   ( HasProcessContext cfg
@@ -52,19 +50,7 @@ instance
       (ExitFailure _, _, stdErr)
         | Lazy.isSuffixOf "context deadline exceeded" stdErr -> do
             IPFS.Timeout secs <- Config.get
-            return . Left <| ErrTimeout secs
+            return . Left <| Process.Timeout secs
 
         | otherwise ->
-          return . Left <| ErrUnknown stdErr
-
-
-data IPFSError
-  = ErrTimeout Natural
-  | ErrUnknown RawMessage
-  deriving ( Exception
-           , Eq
-           , Generic
-           , Show
-           )
-
-type RawMessage = CL.ByteString
+          return . Left <| Process.UnknownErr stdErr

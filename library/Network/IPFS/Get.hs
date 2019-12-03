@@ -13,6 +13,7 @@ import qualified RIO.Text as Text
 
 import qualified Network.IPFS.File.Types     as File
 import           Network.IPFS.Get.Error      as IPFS.Get
+import qualified Network.IPFS.Process.Error as Process
 import           Network.IPFS.Types          as IPFS
 
 getFileOrDirectory ::
@@ -22,8 +23,8 @@ getFileOrDirectory ::
 getFileOrDirectory cid@(IPFS.CID hash) = ipfsRun ["get", Text.unpack hash] "" >>= \case
   Right contents -> return <| Right contents
   Left err -> case err of
-    ErrTimeout secs -> return . Left <| TimedOut cid secs
-    ErrUnknown raw -> return . Left . UnknownErr <| UTF8.textShow raw
+    Process.Timeout secs -> return . Left <| TimedOut cid secs
+    Process.UnknownErr raw -> return . Left . UnknownErr <| UTF8.textShow raw
 
 getFile ::
   MonadLocalIPFS m
@@ -32,8 +33,8 @@ getFile ::
 getFile cid@(IPFS.CID hash) = ipfsRun ["cat"] (UTF8.textToLazyBS hash) >>= \case
   Right contents -> return . Right <| File.Serialized contents
   Left err -> case err of
-    ErrTimeout secs -> return . Left <| TimedOut cid secs
-    ErrUnknown raw -> 
+    Process.Timeout secs -> return . Left <| TimedOut cid secs
+    Process.UnknownErr raw -> 
       if Lazy.isPrefixOf "Error: invalid 'ipfs ref' path" raw
         then return . Left <| InvalidCID hash
         else return . Left . UnknownErr <| UTF8.textShow raw
