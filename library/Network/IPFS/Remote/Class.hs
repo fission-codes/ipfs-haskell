@@ -1,5 +1,3 @@
-{-# LANGUAGE UndecidableInstances #-}
-
 module Network.IPFS.Remote.Class
   ( MonadRemoteIPFS
   , runRemote
