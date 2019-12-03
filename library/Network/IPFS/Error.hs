@@ -1,6 +1,5 @@
 module Network.IPFS.Error
   ( Add (..)
-  , Get (..)
   , Error (..)
   , Linearization (..)
   ) where
@@ -8,13 +7,14 @@ module Network.IPFS.Error
 import Servant.Server
 
 import           Network.IPFS.Prelude
-import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Network.IPFS.Types
 import           Network.IPFS.ToServerError
 
+import qualified Network.IPFS.Get.Error as Get
+
 data Error
   = AddErr Add
-  | GetErr Get
+  | GetErr Get.Error
   | LinearizationErr Linearization
   deriving ( Exception
            , Eq
@@ -29,48 +29,10 @@ instance ToServerError Error where
     GetErr           getErr -> toServerError getErr
     LinearizationErr linErr -> toServerError linErr
 
-data Get
-  = InvalidCID Text
-  | TimedOut CID Natural
-  | UnknownGetErr Text
-  deriving ( Exception
-           , Eq
-           , Generic
-           , Show
-           , ToJSON
-           )
-
-instance Display Get where
-  display = \case
-    InvalidCID hash ->
-      "Invalid CID: " <> display hash
-
-    TimedOut (CID hash) sec ->
-      mconcat
-        [ "Unable to find CID "
-        , display hash
-        , " before the timeout of "
-        , display sec
-        , " seconds."
-        ]
-
-    UnknownGetErr raw ->
-      "Unknwon IPFS get error: " <> display raw
-
-instance ToServerError Get where
-  toServerError = \case
-    InvalidCID txt          -> err422 { errBody = UTF8.textToLazyBS txt }
-    UnknownGetErr _         -> err500 { errBody = "Unknown IPFS error" }
-    (TimedOut (CID hash) _) ->
-      ServerError { errHTTPCode     = 408
-                  , errReasonPhrase = "Time out"
-                  , errBody         = "IPFS timed out looking for " <> UTF8.textToLazyBS hash
-                  , errHeaders      = []
-                  }
-
 data Add
   = InvalidFile
   | UnexpectedOutput Text
+  | RecursiveAddErr Get.Error
   | UnknownAddErr Text
   deriving ( Exception
            , Eq
@@ -83,12 +45,14 @@ instance Display Add where
   display = \case
     InvalidFile          -> "Invalid file"
     UnexpectedOutput txt -> "Unexpected IPFS output: " <> display txt
+    RecursiveAddErr  err -> "Error while adding directory" <> display err
     UnknownAddErr    txt -> "Unknown IPFS add error: " <> display txt
 
 instance ToServerError Add where
   toServerError = \case
     InvalidFile        -> err422 { errBody = "File not processable by IPFS" }
     UnknownAddErr    _ -> err500 { errBody = "Unknown IPFS error" }
+    RecursiveAddErr  _ -> err500 { errBody = "Error while adding directory" }
     UnexpectedOutput _ -> err500 { errBody = "Unexpected IPFS result" }
 
 -- NOTE Will not stay as a newtype in the long term

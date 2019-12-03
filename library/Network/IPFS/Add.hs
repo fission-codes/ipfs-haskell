@@ -32,7 +32,7 @@ addRaw ::
   -> m (Either IPFS.Error.Add IPFS.CID)
 addRaw raw =
   ipfsRun ["add", "-HQ"] raw >>= \case
-    (ExitSuccess, result, _) ->
+    Right result ->
       case CL.lines result of
         [cid] ->
           cid
@@ -45,7 +45,7 @@ addRaw raw =
         bad ->
           return . Left . UnexpectedOutput <| UTF8.textShow bad
 
-    (ExitFailure _, _, err) ->
+    Left err ->
       return . Left . UnknownAddErr <| UTF8.textShow err
 
 addFile ::
@@ -55,7 +55,7 @@ addFile ::
   -> m (Either IPFS.Error.Add (IPFS.SparseTree, IPFS.CID))
 addFile raw name =
   ipfsRun opts raw >>= \case
-    (ExitSuccess, result, _) ->
+    Right result ->
       case CL.lines result of
         [inner, outer] ->
           let
@@ -71,7 +71,7 @@ addFile raw name =
           return . Left . UnexpectedOutput <| UTF8.textShow bad
 
 
-    (ExitFailure _, _, err) ->
+    Left err ->
       return . Left . UnknownAddErr <| UTF8.textShow err
 
     where
@@ -86,13 +86,13 @@ addPath ::
   => FilePath
   -> m (Either IPFS.Error.Add CID)
 addPath path = ipfsRun ["add", "-HQ", path] "" >>= pure . \case
-    (ExitSuccess, result, _) ->
-      case CL.lines result of
-        [cid] -> Right . mkCID . UTF8.stripN 1 <| UTF8.textShow cid
-        bad   -> Left . UnexpectedOutput <| UTF8.textShow bad
+  Right result ->
+    case CL.lines result of
+      [cid] -> Right . mkCID . UTF8.stripN 1 <| UTF8.textShow cid
+      bad   -> Left . UnexpectedOutput <| UTF8.textShow bad
 
-    (ExitFailure _, _, err) ->
-      Left . UnknownAddErr <| UTF8.textShow err
+  Left err ->
+    Left . UnknownAddErr <| UTF8.textShow err
 
 addDir ::
   ( MonadIO m
@@ -142,7 +142,7 @@ foldResults path ignored (Right node) filename = do
     Left err ->  return <| Left err
     Right cid ->
       DAG.Link.create cid (IPFS.Name filename) >>= \case
-      Left err -> return <| Left err
+      Left err -> return . Left <| RecursiveAddErr err
       Right link ->
         return <| Right <| node { links = link:(links node) }
 

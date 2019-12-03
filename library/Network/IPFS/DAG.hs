@@ -19,7 +19,7 @@ put ::
   => Lazy.ByteString
   -> m (Either IPFS.Error.Add IPFS.CID)
 put raw = ipfsRun ["dag", "put", "-f", "dag-pb"] raw >>= \case
-  (ExitSuccess, result, _) ->
+  Right result -> 
     case CL.lines result of
       [cid] ->
         cid
@@ -32,7 +32,7 @@ put raw = ipfsRun ["dag", "put", "-f", "dag-pb"] raw >>= \case
       bad ->
         pure . Left . UnexpectedOutput <| UTF8.textShow bad
 
-  (ExitFailure _, _, err) ->
+  Left err -> 
     pure . Left . UnknownAddErr <| UTF8.textShow err
 
 putNode :: 
