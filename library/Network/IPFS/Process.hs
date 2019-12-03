@@ -1,12 +1,13 @@
 module Network.IPFS.Process (runProc) where
 
 import Network.IPFS.Prelude
-
-import           Network.IPFS.Types         as IPFS
-import           Network.IPFS.Internal.Process
+import Network.IPFS.Process.Types
 
 runProc ::
-  RIOProc cfg m
+  ( MonadRIO          cfg m
+  , HasProcessContext cfg
+  , HasLogFunc        cfg
+  )
   => (ProcessConfig stdin stdout () -> m a)
   -> FilePath
   -> StreamIn  stdin

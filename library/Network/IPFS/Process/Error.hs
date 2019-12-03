@@ -4,7 +4,7 @@ module Network.IPFS.Process.Error
   ) where
 
 import Network.IPFS.Prelude
-import Data.ByteString.Lazy.Char8 as CL
+import Network.IPFS.Process.Types
 
 data Error
   = Timeout Natural
@@ -19,5 +19,3 @@ instance Display Error where
   display = \case
     Timeout _ -> "IPFS timed out"
     UnknownErr raw -> displayShow raw
-
-type RawMessage = CL.ByteString
