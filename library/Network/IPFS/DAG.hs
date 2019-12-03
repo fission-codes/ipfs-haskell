@@ -8,16 +8,16 @@ import Network.IPFS.Local.Class
 
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Data.ByteString.Lazy.Char8 as CL
-import qualified RIO.ByteString.Lazy as Lazy
+import qualified RIO.ByteString.Lazy        as Lazy
 
-import           Network.IPFS.Error          as IPFS.Error
+import           Network.IPFS.Add.Error      as IPFS.Add
 import           Network.IPFS.Types          as IPFS
 import           Network.IPFS.DAG.Node.Types as DAG
 
 put :: 
   MonadLocalIPFS m
   => Lazy.ByteString
-  -> m (Either IPFS.Error.Add IPFS.CID)
+  -> m (Either IPFS.Add.Error IPFS.CID)
 put raw = ipfsRun ["dag", "put", "-f", "dag-pb"] raw >>= \case
   Right result -> 
     case CL.lines result of
@@ -38,5 +38,5 @@ put raw = ipfsRun ["dag", "put", "-f", "dag-pb"] raw >>= \case
 putNode :: 
   MonadLocalIPFS m
   => DAG.Node
-  -> m (Either IPFS.Error.Add IPFS.CID)
+  -> m (Either IPFS.Add.Error IPFS.CID)
 putNode node = put <| encode node

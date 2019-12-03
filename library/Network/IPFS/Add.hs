@@ -19,7 +19,7 @@ import qualified RIO.ByteString.Lazy as Lazy
 
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 
-import           Network.IPFS.Error          as IPFS.Error
+import           Network.IPFS.Add.Error      as IPFS.Add
 import           Network.IPFS.Types          as IPFS
 import           Network.IPFS.DAG.Node.Types as DAG
 import           Network.IPFS.DAG.Link       as DAG.Link
@@ -29,7 +29,7 @@ import           Network.IPFS.DAG as DAG
 addRaw ::
   MonadLocalIPFS m
   => Lazy.ByteString
-  -> m (Either IPFS.Error.Add IPFS.CID)
+  -> m (Either IPFS.Add.Error IPFS.CID)
 addRaw raw =
   ipfsRun ["add", "-HQ"] raw >>= \case
     Right result ->
@@ -52,7 +52,7 @@ addFile ::
   MonadLocalIPFS m
   => Lazy.ByteString
   -> IPFS.Name
-  -> m (Either IPFS.Error.Add (IPFS.SparseTree, IPFS.CID))
+  -> m (Either IPFS.Add.Error (IPFS.SparseTree, IPFS.CID))
 addFile raw name =
   ipfsRun opts raw >>= \case
     Right result ->
@@ -84,7 +84,7 @@ addFile raw name =
 addPath ::
   MonadLocalIPFS m
   => FilePath
-  -> m (Either IPFS.Error.Add CID)
+  -> m (Either IPFS.Add.Error CID)
 addPath path = ipfsRun ["add", "-HQ", path] "" >>= pure . \case
   Right result ->
     case CL.lines result of
@@ -100,7 +100,7 @@ addDir ::
   )
   => IPFS.Ignored
   -> FilePath
-  -> m (Either IPFS.Error.Add IPFS.CID)
+  -> m (Either IPFS.Add.Error IPFS.CID)
 addDir ignored path = doesFileExist path >>= \case
   True -> addPath path
   False -> walkDir ignored path
@@ -111,7 +111,7 @@ walkDir ::
   )
   => IPFS.Ignored
   -> FilePath
-  -> m (Either IPFS.Error.Add IPFS.CID)
+  -> m (Either IPFS.Add.Error IPFS.CID)
 walkDir ignored path = do
   files <- listDirectory path
 
@@ -133,9 +133,9 @@ foldResults ::
   )
   => FilePath
   -> IPFS.Ignored
-  -> Either IPFS.Error.Add Node
+  -> Either IPFS.Add.Error Node
   -> FilePath
-  -> m (Either IPFS.Error.Add Node)
+  -> m (Either IPFS.Add.Error Node)
 foldResults _ _ (Left err) _ = return <| Left err
 foldResults path ignored (Right node) filename = do
   addDir ignored (path </> filename) >>= \case
