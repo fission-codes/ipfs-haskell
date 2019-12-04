@@ -2,6 +2,7 @@ module Network.IPFS.Peer
   ( all
   , rawList
   , connect
+  , connectRetry
   , getExternalAddress
   ) where
 
@@ -42,6 +43,16 @@ connect ::
 connect peer@(Peer peerID) = IPFS.runLocal ["swarm", "connect"] (UTF8.textToLazyBS peerID) >>= pure . \case
   Left _ -> Left <| CannotConnect peer
   Right _ -> Right ()
+
+connectRetry ::
+  MonadLocalIPFS m
+  => Peer
+  -> Int
+  -> m (Either IPFS.Peer.Error ())
+connectRetry peer (-1) = return . Left <| CannotConnect peer
+connectRetry peer tries = connect peer >>= \case
+  Right _ -> return <| Right ()
+  Left _err -> connectRetry peer (tries - 1)
 
 peerAddressRe :: Regex
 peerAddressRe = mkRegex "^/ip[46]/([a-zA-Z0-9.:]*)/"
