@@ -18,12 +18,12 @@ add ::
   )
   => IPFS.CID
   -> m (Either IPFS.Add.Error CID)
-add (CID hash) = ipfsPin hash >>= \case
+add cid = ipfsPin cid >>= \case
   Right Pin.Response { cids } ->
     case cids of
-      [cid] -> do
-        logDebug <| "Pinned CID " <> display hash
-        return <| Right cid
+      [cid'] -> do
+        logDebug <| "Pinned CID " <> display cid'
+        return <| Right cid'
 
       _ ->
         logLeft <| UnexpectedOutput <| UTF8.textShow cids
@@ -39,18 +39,18 @@ rm ::
   )
   => IPFS.CID
   -> m (Either IPFS.Add.Error CID)
-rm cid@(CID hash) = ipfsUnpin hash False >>= \case
+rm cid = ipfsUnpin cid False >>= \case
   Right Pin.Response { cids } ->
     case cids of
       [cid'] -> do
-        logDebug <| "Pinned CID " <> display hash
+        logDebug <| "Pinned CID " <> display cid'
         return <| Right cid'
 
       _ ->
         logLeft <| UnexpectedOutput <| UTF8.textShow cids
 
   Left _ -> do
-    logDebug <| "Cannot unpin CID " <> display hash <> " because it was not pinned"
+    logDebug <| "Cannot unpin CID " <> display cid <> " because it was not pinned"
     return <| Right cid
 
 logLeft ::
