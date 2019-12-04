@@ -4,7 +4,7 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b20c9caf3f9e681d17ad4f08c59ed272dd4264fc6e358c29ed7c1590e8d302bc
+-- hash: 110aba584304ee2f3985a46afe07b910ad681ad299577306b3e62a2fba874ee2
 
 name:           ipfs
 version:        1.0.0
@@ -73,7 +73,6 @@ library
       Network.IPFS.SparseTree.Types
       Network.IPFS.Stat
       Network.IPFS.Timeout.Types
-      Network.IPFS.ToServerError
       Network.IPFS.Types
       Network.IPFS.URL.Types
   other-modules:
