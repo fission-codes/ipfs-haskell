@@ -4,22 +4,22 @@ module Network.IPFS.DAG
   ) where
 
 import Network.IPFS.Prelude
-import Network.IPFS.Local.Class
+import Network.IPFS.Local.Class as IPFS
 
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Data.ByteString.Lazy.Char8 as CL
-import qualified RIO.ByteString.Lazy as Lazy
+import qualified RIO.ByteString.Lazy        as Lazy
 
-import           Network.IPFS.Error          as IPFS.Error
+import           Network.IPFS.Add.Error      as IPFS.Add
 import           Network.IPFS.Types          as IPFS
 import           Network.IPFS.DAG.Node.Types as DAG
 
 put :: 
   MonadLocalIPFS m
   => Lazy.ByteString
-  -> m (Either IPFS.Error.Add IPFS.CID)
-put raw = ipfsRun ["dag", "put", "-f", "dag-pb"] raw >>= \case
-  (ExitSuccess, result, _) ->
+  -> m (Either IPFS.Add.Error IPFS.CID)
+put raw = IPFS.runLocal ["dag", "put", "-f", "dag-pb"] raw >>= \case
+  Right result -> 
     case CL.lines result of
       [cid] ->
         cid
@@ -32,11 +32,11 @@ put raw = ipfsRun ["dag", "put", "-f", "dag-pb"] raw >>= \case
       bad ->
         pure . Left . UnexpectedOutput <| UTF8.textShow bad
 
-  (ExitFailure _, _, err) ->
+  Left err -> 
     pure . Left . UnknownAddErr <| UTF8.textShow err
 
 putNode :: 
   MonadLocalIPFS m
   => DAG.Node
-  -> m (Either IPFS.Error.Add IPFS.CID)
+  -> m (Either IPFS.Add.Error IPFS.CID)
 putNode node = put <| encode node

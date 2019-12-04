@@ -6,6 +6,7 @@ module Network.IPFS.Types
   , Name (..)
   , Opt
   , Command
+  , RawMessage
   , Peer (..)
   , Path (..)
   , SparseTree (..)

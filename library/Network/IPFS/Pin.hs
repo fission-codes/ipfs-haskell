@@ -8,7 +8,7 @@ import           Network.IPFS.Remote.Class
 import qualified Network.IPFS.Internal.UTF8       as UTF8
 
 import qualified Network.IPFS.Client.Pin     as Pin
-import           Network.IPFS.Error          as IPFS.Error
+import           Network.IPFS.Add.Error      as IPFS.Add
 import           Network.IPFS.Types          as IPFS
 
 add ::
@@ -17,7 +17,7 @@ add ::
   , HasLogFunc      cfg
   )
   => IPFS.CID
-  -> m (Either IPFS.Error.Add CID)
+  -> m (Either IPFS.Add.Error CID)
 add (CID hash) = ipfsPin hash >>= \case
   Right Pin.Response { cids } ->
     case cids of
@@ -38,7 +38,7 @@ rm ::
   , HasLogFunc      cfg
   )
   => IPFS.CID
-  -> m (Either IPFS.Error.Add CID)
+  -> m (Either IPFS.Add.Error CID)
 rm cid@(CID hash) = ipfsUnpin hash False >>= \case
   Right Pin.Response { cids } ->
     case cids of
@@ -53,7 +53,13 @@ rm cid@(CID hash) = ipfsUnpin hash False >>= \case
     logDebug <| "Cannot unpin CID " <> display hash <> " because it was not pinned"
     return <| Right cid
 
-logLeft :: (MonadRIO cfg m, HasLogFunc cfg, Show a) => a -> m (Either IPFS.Error.Add b)
+logLeft ::
+  ( MonadRIO cfg m
+  , HasLogFunc cfg
+  , Show a
+  )
+  => a
+  -> m (Either IPFS.Add.Error b)
 logLeft errStr = do
   let err = UnknownAddErr <| UTF8.textShow errStr
   logError <| display err

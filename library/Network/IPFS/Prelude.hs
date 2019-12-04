@@ -2,6 +2,7 @@
 module Network.IPFS.Prelude
   ( module Control.Lens
   , module Data.Aeson
+  , module Data.Has
   , module Network.IPFS.Internal.Constraint
   , module Flow
   , module RIO
@@ -11,6 +12,7 @@ module Network.IPFS.Prelude
 
 import Control.Lens                ((%~), (.~), (?~), (^?))
 import Data.Aeson
+import Data.Has
 import Network.IPFS.Internal.Constraint
 
 import Flow
