@@ -3,11 +3,8 @@ module Network.IPFS.Error
   , Linearization (..)
   ) where
 
-import Servant.Server
-
 import           Network.IPFS.Prelude
 import           Network.IPFS.Types
-import           Network.IPFS.ToServerError
 
 import qualified Network.IPFS.Add.Error as Add
 import qualified Network.IPFS.Get.Error as Get
@@ -23,12 +20,6 @@ data Error
            , ToJSON
            )
 
-instance ToServerError Error where
-  toServerError = \case
-    AddErr           addErr -> toServerError addErr
-    GetErr           getErr -> toServerError getErr
-    LinearizationErr linErr -> toServerError linErr
-
 -- NOTE Will not stay as a newtype in the long term
 newtype Linearization = NonLinear SparseTree
   deriving          ( Eq
@@ -41,6 +32,3 @@ newtype Linearization = NonLinear SparseTree
 
 instance Display Linearization where
   display (NonLinear sparseTree) = "Unable to linearize IPFS result: " <> display sparseTree
-
-instance ToServerError Linearization where
-  toServerError _ = err500 { errBody = "Unable to linearize IPFS result" }

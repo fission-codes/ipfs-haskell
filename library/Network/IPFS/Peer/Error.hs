@@ -1,9 +1,6 @@
 module Network.IPFS.Peer.Error (Error (..)) where
 
-import Servant.Server
-
 import Network.IPFS.Prelude
-import Network.IPFS.ToServerError
 import Network.IPFS.Peer.Types
 
 data Error
@@ -21,9 +18,3 @@ instance Display Error where
     DecodeFailure err  -> "Unable to decode: " <> displayShow err
     CannotConnect peer -> "Unable to connect to " <> display peer
     UnknownErr    msg  -> "Unknown IPFS peer list error: " <> display msg
-
-instance ToServerError Error where
-  toServerError = \case
-    DecodeFailure _ -> err500 { errBody = "Peer list decode error" }
-    CannotConnect _ -> err500 { errBody = "Unable to connect to peer" }
-    UnknownErr    _ -> err500 { errBody = "Unknown peer list error" }
