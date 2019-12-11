@@ -86,6 +86,7 @@ dependencies:
   - http-client
   - ip
   - lens
+  - monad-logger
   - regex-compat
   - rio
   - servant-client
