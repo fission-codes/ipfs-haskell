@@ -90,6 +90,7 @@ dependencies:
   - regex-compat
   - rio
   - servant-client
+  - servant-client-core
   - servant-multipart
   - servant-server
   - swagger2
