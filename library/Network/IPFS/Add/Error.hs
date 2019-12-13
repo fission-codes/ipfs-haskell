@@ -7,6 +7,7 @@ data Error
   = InvalidFile
   | UnexpectedOutput Text
   | RecursiveAddErr Get.Error
+  | KnownAddErr Text
   | UnknownAddErr Text
   deriving ( Exception
            , Eq
@@ -20,4 +21,5 @@ instance Display Error where
     InvalidFile          -> "Invalid file"
     UnexpectedOutput txt -> "Unexpected IPFS output: " <> display txt
     RecursiveAddErr  err -> "Error while adding directory" <> display err
+    KnownAddErr      txt -> "IPFS add error:" <> display txt
     UnknownAddErr    txt -> "Unknown IPFS add error: " <> display txt

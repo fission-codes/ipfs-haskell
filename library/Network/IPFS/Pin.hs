@@ -35,18 +35,25 @@ add cid = ipfsPin cid >>= \case
       _ ->
         logLeft <| UnexpectedOutput <| UTF8.textShow cids
 
-  Left (FailureResponse _a response) -> do
-    let body = responseBody <| response
-    let Just (IPFSErrorBody {message}) =  decode body
-    let err = UnknownAddErr <| UTF8.textShow <| message
-    trace "Hi mom" (return err)
-    -- traceShow (display body)
-    logError <| display <| traceShow err err
+  Left err -> do
+    logError <| displayShow err
+    err |> formatIpfsAddError |> Left |> return
 
-    return <| Left err
+formatIpfsAddError :: ClientError -> Error
+formatIpfsAddError err = do
+  case err of
+    (FailureResponse _ response) -> do
+      response
+      |> responseBody
+      |> decode
+      |> \case
+        Just (IPFSErrorBody {message}) ->
+          KnownAddErr <| UTF8.textShow message
 
-  Left err ->
-    return <| Left <| UnknownAddErr <| UTF8.textShow err
+        _ ->
+          UnknownAddErr <| "Something entirely unknown happend!"
+    _ ->
+      UnknownAddErr <| "Something entirely unknown happend!"
 
 -- | Unpin a CID
 rm ::
@@ -69,6 +76,8 @@ rm cid = ipfsUnpin cid False >>= \case
     logDebug <| "Cannot unpin CID " <> display cid <> " because it was not pinned"
     return <| Right cid
 
+
+
 logLeft ::
   ( MonadRIO cfg m
   , HasLogFunc cfg
@@ -79,20 +88,3 @@ logLeft errStr = do
   let err = UnknownAddErr <| UTF8.textShow errStr
   logError <| display err
   return <| Left err
-
-
--- type API = "ipfs" :> "add" :> Capture "cid" CID :> PUT '[JSON] ByteString
-
--- putAPI :: CID -> ClientM ByteString
--- putAPI = client (Proxy :: Proxy API)
-
--- env httper = ClientEnv     {
---     manager = httper
---     baseUrl = "localhost:5001"
---     cookieJar = Nothing
--- }
-
--- -- Run the request for realzies
--- httpManager <- HTTP.newManager HTTP.defaultManagerSettings
-
--- runClientM (env httpManager) putAPI
