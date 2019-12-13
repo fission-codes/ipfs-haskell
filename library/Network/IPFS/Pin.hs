@@ -36,24 +36,33 @@ add cid = ipfsPin cid >>= \case
         logLeft <| UnexpectedOutput <| UTF8.textShow cids
 
   Left err -> do
-    logError <| displayShow err
-    err |> formatIpfsAddError |> Left |> return
+    newError <- formatIpfsAddError err
+    return <| Left <| newError
 
-formatIpfsAddError :: ClientError -> Error
+formatIpfsAddError ::
+  ( MonadRIO        cfg m
+  , MonadRemoteIPFS     m
+  , HasLogFunc      cfg
+  )
+  => ClientError
+  -> m (Error)
 formatIpfsAddError err = do
-  case err of
-    (FailureResponse _ response) -> do
-      response
-      |> responseBody
-      |> decode
-      |> \case
-        Just (IPFSErrorBody {message}) ->
-          KnownAddErr <| UTF8.textShow message
+  logError <| displayShow err
+  let newError = case err of
+        (FailureResponse _ response) -> do
+          response
+          |> responseBody
+          |> decode
+          |> \case
+            Just (IPFSErrorBody {message}) ->
+              KnownAddErr <| UTF8.textShow message
 
+            _ ->
+              UnknownAddErr <| UTF8.textShow err
         _ ->
-          UnknownAddErr <| "Something entirely unknown happend!"
-    _ ->
-      UnknownAddErr <| "Something entirely unknown happend!"
+          UnknownAddErr <| UTF8.textShow err
+
+  return newError
 
 -- | Unpin a CID
 rm ::
