@@ -4,7 +4,7 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 110aba584304ee2f3985a46afe07b910ad681ad299577306b3e62a2fba874ee2
+-- hash: 80dd7eb66526a5a58adb405fded6b0e0d0bb3cdc5d3beb9b1c4440c7f82b0a15
 
 name:           ipfs
 version:        1.0.0
@@ -56,6 +56,7 @@ library
       Network.IPFS.Internal.Constraint
       Network.IPFS.Internal.Orphanage.ByteString.Lazy
       Network.IPFS.Internal.Orphanage.Natural
+      Network.IPFS.Internal.Orphanage.Utf8Builder
       Network.IPFS.Internal.UTF8
       Network.IPFS.Local.Class
       Network.IPFS.Name.Types
@@ -92,6 +93,7 @@ library
     , http-client
     , ip
     , lens
+    , monad-logger
     , regex-compat
     , rio
     , servant-client
@@ -127,6 +129,7 @@ test-suite fission-doctest
     , ip
     , lens
     , lens-aeson
+    , monad-logger
     , regex-compat
     , rio
     , servant-client

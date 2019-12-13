@@ -12,9 +12,8 @@ import           Network.IPFS.Add.Error      as IPFS.Add
 import           Network.IPFS.Types          as IPFS
 
 add ::
-  ( MonadRIO        cfg m
-  , MonadRemoteIPFS     m
-  , HasLogFunc      cfg
+  ( MonadRemoteIPFS m
+  , MonadLogger     m
   )
   => IPFS.CID
   -> m (Either IPFS.Add.Error CID)
@@ -33,9 +32,8 @@ add cid = ipfsPin cid >>= \case
 
 -- | Unpin a CID
 rm ::
-  ( MonadRIO        cfg m
-  , MonadRemoteIPFS     m
-  , HasLogFunc      cfg
+  ( MonadRemoteIPFS  m
+  , MonadLogger      m
   )
   => IPFS.CID
   -> m (Either IPFS.Add.Error CID)
@@ -54,8 +52,7 @@ rm cid = ipfsUnpin cid False >>= \case
     return <| Right cid
 
 logLeft ::
-  ( MonadRIO cfg m
-  , HasLogFunc cfg
+  ( MonadLogger m
   , Show a
   )
   => a
