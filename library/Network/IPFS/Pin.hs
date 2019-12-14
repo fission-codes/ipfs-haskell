@@ -36,33 +36,8 @@ add cid = ipfsPin cid >>= \case
         logLeft <| UnexpectedOutput <| UTF8.textShow cids
 
   Left err -> do
-    newError <- formatIpfsAddError err
-    return <| Left <| newError
-
-formatIpfsAddError ::
-  ( MonadRIO        cfg m
-  , MonadRemoteIPFS     m
-  , HasLogFunc      cfg
-  )
-  => ClientError
-  -> m (Error)
-formatIpfsAddError err = do
-  logError <| displayShow err
-  let newError = case err of
-        (FailureResponse _ response) -> do
-          response
-          |> responseBody
-          |> decode
-          |> \case
-            Just (IPFSErrorBody {message}) ->
-              KnownAddErr <| UTF8.textShow message
-
-            _ ->
-              UnknownAddErr <| UTF8.textShow err
-        _ ->
-          UnknownAddErr <| UTF8.textShow err
-
-  return newError
+    formattedError <- formatClientError err
+    return <| Left <| formattedError
 
 -- | Unpin a CID
 rm ::
@@ -85,7 +60,31 @@ rm cid = ipfsUnpin cid False >>= \case
     logDebug <| "Cannot unpin CID " <> display cid <> " because it was not pinned"
     return <| Right cid
 
+formatClientError ::
+  ( MonadRIO        cfg m
+  , MonadRemoteIPFS     m
+  , HasLogFunc      cfg
+  )
+  => ClientError
+  -> m (Error)
+formatClientError err = do
+  logError <| displayShow err
+  let newError = case err of
+        (FailureResponse _ response) -> do
+          response
+          |> responseBody
+          |> decode
+          |> \case
+            Just (IPFSErrorBody {message}) ->
+              IPFSDaemonErr <| UTF8.textShow message
 
+            _ ->
+              UnexpectedOutput <| UTF8.textShow err
+
+        unknownClientError ->
+          UnknownAddErr <| UTF8.textShow unknownClientError
+
+  return newError
 
 logLeft ::
   ( MonadRIO cfg m
