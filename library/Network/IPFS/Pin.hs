@@ -12,13 +12,14 @@ import           Network.IPFS.Add.Error      as IPFS.Add
 import           Network.IPFS.Types          as IPFS
 import           Servant.Client.Core
 
-
+-- | TODO: Move to a file for IPFS client types
 data IPFSErrorBody = IPFSErrorBody {message :: String}
 instance FromJSON IPFSErrorBody where
   parseJSON = withObject "IPFSErrorBody" \obj -> do
     message    <- obj .: "Message"
     return <| IPFSErrorBody {..}
 
+-- | Pin a CID
 add ::
   ( MonadRemoteIPFS m
   , MonadLogger     m
@@ -32,11 +33,12 @@ add cid = ipfsPin cid >>= \case
         logDebug <| "Pinned CID " <> display cid'
         return <| Right cid'
 
-      _ ->
-        logLeft <| UnexpectedOutput <| UTF8.textShow cids
+      _ -> do
+        formattedErr <- parseUnexpectedOutput <| UTF8.textShow cids
+        return <| Left <| formattedErr
 
   Left err -> do
-    formattedError <- formatClientError err
+    formattedError <- parseClientError err
     return <| Left <| formattedError
 
 -- | Unpin a CID
@@ -53,21 +55,22 @@ rm cid = ipfsUnpin cid False >>= \case
         logDebug <| "Pinned CID " <> display cid'
         return <| Right cid'
 
-      _ ->
-        logLeft <| UnexpectedOutput <| UTF8.textShow cids
+      _ -> do
+        formattedErr <- parseUnexpectedOutput <| UTF8.textShow cids
+        return <| Left <| formattedErr
 
   Left _ -> do
     logDebug <| "Cannot unpin CID " <> display cid <> " because it was not pinned"
     return <| Right cid
 
-formatClientError ::
+-- | Parse and Log the Servant Client Error returned from the IPFS Daemon
+parseClientError ::
   ( MonadRIO        cfg m
-  , MonadRemoteIPFS     m
   , HasLogFunc      cfg
   )
   => ClientError
   -> m (Error)
-formatClientError err = do
+parseClientError err = do
   logError <| displayShow err
   let newError = case err of
         (FailureResponse _ response) -> do
@@ -86,13 +89,15 @@ formatClientError err = do
 
   return newError
 
-logLeft ::
+-- | Parse and Log unexpected output when attempting to pin
+parseUnexpectedOutput ::
   ( MonadRIO cfg m
   , HasLogFunc cfg
   )
-  => IPFS.Add.Error
-  -> m (Either IPFS.Add.Error b)
-logLeft errStr = do
-  let err = UnknownAddErr <| UTF8.textShow errStr
-  logError <| display err
-  return <| Left err
+  => Text
+  -> m (IPFS.Add.Error)
+parseUnexpectedOutput errStr = do
+  let baseError = UnexpectedOutput errStr
+  let err = UnknownAddErr <| UTF8.textShow <| baseError
+  logError <| display baseError
+  return err
