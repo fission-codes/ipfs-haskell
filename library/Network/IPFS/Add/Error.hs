@@ -21,5 +21,5 @@ instance Display Error where
     InvalidFile          -> "Invalid file"
     UnexpectedOutput txt -> "Unexpected IPFS output: " <> display txt
     RecursiveAddErr  err -> "Error while adding directory" <> display err
-    IPFSDaemonErr    txt -> "IPFS Daemon error:" <> display txt -- TODO: Move this type to it's own file
+    IPFSDaemonErr    txt -> "IPFS Daemon error: " <> display txt
     UnknownAddErr    txt -> "Unknown IPFS add error: " <> display txt

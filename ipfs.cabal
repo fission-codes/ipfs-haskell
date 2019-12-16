@@ -39,6 +39,7 @@ library
       Network.IPFS.Client
       Network.IPFS.Client.Add
       Network.IPFS.Client.Cat
+      Network.IPFS.Client.Error.Types
       Network.IPFS.Client.Param
       Network.IPFS.Client.Pin
       Network.IPFS.Config

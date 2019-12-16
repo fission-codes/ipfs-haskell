@@ -47,7 +47,7 @@ rm cid = ipfsUnpin cid False >>= \case
   Right Pin.Response { cids } ->
     case cids of
       [cid'] -> do
-        logDebug <| "Pinned CID " <> display cid'
+        logDebug <| "Unpinned CID " <> display cid'
         return <| Right cid'
 
       _ -> do
@@ -67,8 +67,8 @@ parseClientError ::
   -> m Error
 parseClientError err = do
   logError <| displayShow err
-  let newError = case err of
-        (FailureResponse _ response) ->
+  return <| case err of
+        FailureResponse _ response ->
           response
           |> responseBody
           |> decode
@@ -82,8 +82,6 @@ parseClientError err = do
         unknownClientError ->
           UnknownAddErr <| UTF8.textShow unknownClientError
 
-  return newError
-
 -- | Parse and Log unexpected output when attempting to pin
 parseUnexpectedOutput ::
   ( MonadRIO cfg m
@@ -92,7 +90,9 @@ parseUnexpectedOutput ::
   => Text
   -> m IPFS.Add.Error
 parseUnexpectedOutput errStr = do
-  let baseError = UnexpectedOutput errStr
-  let err = UnknownAddErr <| UTF8.textShow <| baseError
+  let
+    baseError = UnexpectedOutput errStr
+    err = UnknownAddErr <| UTF8.textShow baseError
+
   logError <| display baseError
   return err
