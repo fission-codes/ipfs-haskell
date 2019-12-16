@@ -21,7 +21,8 @@ instance FromJSON IPFSErrorBody where
 
 -- | Pin a CID
 add ::
-  ( MonadRemoteIPFS m
+  ( MonadRIO cfg m
+  , MonadRemoteIPFS m
   , MonadLogger     m
   )
   => IPFS.CID
@@ -43,7 +44,8 @@ add cid = ipfsPin cid >>= \case
 
 -- | Unpin a CID
 rm ::
-  ( MonadRemoteIPFS  m
+  ( MonadRIO cfg m
+  , MonadRemoteIPFS  m
   , MonadLogger      m
   )
   => IPFS.CID
@@ -66,7 +68,7 @@ rm cid = ipfsUnpin cid False >>= \case
 -- | Parse and Log the Servant Client Error returned from the IPFS Daemon
 parseClientError ::
   ( MonadRIO        cfg m
-  , HasLogFunc      cfg
+  , MonadLogger     m
   )
   => ClientError
   -> m (Error)
@@ -92,7 +94,7 @@ parseClientError err = do
 -- | Parse and Log unexpected output when attempting to pin
 parseUnexpectedOutput ::
   ( MonadRIO cfg m
-  , HasLogFunc cfg
+  , MonadLogger m
   )
   => Text
   -> m (IPFS.Add.Error)
