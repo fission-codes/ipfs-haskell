@@ -12,13 +12,6 @@ import           Network.IPFS.Add.Error      as IPFS.Add
 import           Network.IPFS.Types          as IPFS
 import           Servant.Client.Core
 
--- | TODO: Move to a file for IPFS client types
-data IPFSErrorBody = IPFSErrorBody {message :: String}
-instance FromJSON IPFSErrorBody where
-  parseJSON = withObject "IPFSErrorBody" \obj -> do
-    message    <- obj .: "Message"
-    return <| IPFSErrorBody {..}
-
 -- | Pin a CID
 add ::
   ( MonadRIO cfg m
@@ -71,16 +64,16 @@ parseClientError ::
   , MonadLogger     m
   )
   => ClientError
-  -> m (Error)
+  -> m Error
 parseClientError err = do
   logError <| displayShow err
   let newError = case err of
-        (FailureResponse _ response) -> do
+        (FailureResponse _ response) ->
           response
           |> responseBody
           |> decode
           |> \case
-            Just (IPFSErrorBody {message}) ->
+            Just IPFS.ErrorBody {message} ->
               IPFSDaemonErr <| UTF8.textShow message
 
             _ ->
@@ -97,7 +90,7 @@ parseUnexpectedOutput ::
   , MonadLogger m
   )
   => Text
-  -> m (IPFS.Add.Error)
+  -> m IPFS.Add.Error
 parseUnexpectedOutput errStr = do
   let baseError = UnexpectedOutput errStr
   let err = UnknownAddErr <| UTF8.textShow <| baseError
