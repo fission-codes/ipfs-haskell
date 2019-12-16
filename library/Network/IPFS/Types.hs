@@ -15,6 +15,7 @@ module Network.IPFS.Types
   , URL (..)
   , Ignored
   , Gateway (..)
+  , ErrorBody (..)
   ) where
 
 import Network.IPFS.BinPath.Types
@@ -28,3 +29,4 @@ import Network.IPFS.Timeout.Types
 import Network.IPFS.URL.Types
 import Network.IPFS.Ignored.Types
 import Network.IPFS.Gateway.Types
+import Network.IPFS.Client.Error.Types
