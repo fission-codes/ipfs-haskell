@@ -29,11 +29,11 @@ add cid = ipfsPin cid >>= \case
 
       _ -> do
         formattedErr <- parseUnexpectedOutput <| UTF8.textShow cids
-        return <| Left <| formattedErr
+        return <| Left formattedErr
 
   Left err -> do
     formattedError <- parseClientError err
-    return <| Left <| formattedError
+    return <| Left formattedError
 
 -- | Unpin a CID
 rm ::
@@ -52,7 +52,7 @@ rm cid = ipfsUnpin cid False >>= \case
 
       _ -> do
         formattedErr <- parseUnexpectedOutput <| UTF8.textShow cids
-        return <| Left <| formattedErr
+        return <| Left formattedErr
 
   Left _ -> do
     logDebug <| "Cannot unpin CID " <> display cid <> " because it was not pinned"
