@@ -4,11 +4,13 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 80dd7eb66526a5a58adb405fded6b0e0d0bb3cdc5d3beb9b1c4440c7f82b0a15
+-- hash: 13051bbfb1330694f5233a398b8714b1d4a26b54e73507cf60a5aa0f3f7bcb8f
 
 name:           ipfs
 version:        1.0.0
-category:       API
+synopsis:       A library for interfacing with local and remote IPFS nodes
+description:    A library for shelling out to local IPFS nodes and communicating via HTTP with remote IPFS nodes
+category:       Network
 homepage:       https://github.com/fission-suite/ipfs-haskell#readme
 bug-reports:    https://github.com/fission-suite/ipfs-haskell/issues
 author:         Brooklyn Zelenka,
@@ -77,7 +79,8 @@ library
       Network.IPFS.Timeout.Types
       Network.IPFS.Types
       Network.IPFS.URL.Types
-  other-modules:
+      Paths_ipfs
+  autogen-modules:
       Paths_ipfs
   hs-source-dirs:
       library
@@ -86,7 +89,7 @@ library
   build-depends:
       Glob
     , aeson
-    , base
+    , base <5
     , bytestring
     , data-has
     , envy
@@ -119,7 +122,7 @@ test-suite fission-doctest
       Glob
     , QuickCheck
     , aeson
-    , base
+    , base <5
     , bytestring
     , data-has
     , directory
