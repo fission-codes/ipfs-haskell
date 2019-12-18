@@ -49,9 +49,6 @@ add (Serialized rawData) = IPFS.addRaw rawData >>= \case
 
 ```
 
-
-
-
 You can see example instances below:
 ```haskell
 instance
@@ -62,18 +59,18 @@ instance
   )
   => MonadLocalIPFS (RIO cfg) where
     runLocal opts arg = do
-      IPFS.BinPath ipfs <- Config.get
-      IPFS.Timeout secs <- Config.get
+      IPFS.BinPath ipfs <- view hasLens
+      IPFS.Timeout secs <- view hasLens
       let opts' = ("--timeout=" <> show secs <> "s") : opts
 
       runProc readProcess ipfs (byteStringInput arg) byteStringOutput opts' >>= \case
         (ExitSuccess, contents, _) ->
-          return <| Right contents
+          return $ Right contents
         (ExitFailure _, _, stdErr)
           | Lazy.isSuffixOf "context deadline exceeded" stdErr ->
-              return . Left <| Process.Timeout secs
+              return . Left $ Process.Timeout secs
           | otherwise ->
-            return . Left <| Process.UnknownErr stdErr
+            return . Left $ Process.UnknownErr stdErr
 
 instance
   ( Has IPFS.URL     cfg
@@ -81,11 +78,11 @@ instance
   )
   => MonadRemoteIPFS (RIO cfg) where
     runRemote query = do
-      IPFS.URL url <- Config.get
-      manager      <- Config.get
+      IPFS.URL url <- view hasLens
+      manager      <- view hasLens
 
       url
-        |> mkClientEnv manager
-        |> runClientM query
-        |> liftIO
+        & mkClientEnv manager
+        & runClientM query
+        & liftIO
 ```
