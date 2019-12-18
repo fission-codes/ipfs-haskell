@@ -1,6 +1,8 @@
 name: ipfs
 version: '1.0.0'
-category: API
+synopsis: Access IPFS locally and remotely
+description: Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node. 
+category: Network
 author:
   - Brooklyn Zelenka
   - Daniel Holmgren
@@ -77,7 +79,7 @@ default-extensions:
 
 dependencies:
   - aeson
-  - base
+  - base < 5
   - bytestring
   - data-has
   - envy
@@ -99,6 +101,9 @@ dependencies:
 
 library:
   source-dirs: library
+
+  generated-exposed-modules:
+    - Paths_ipfs
 
 tests:
   fission-doctest:
