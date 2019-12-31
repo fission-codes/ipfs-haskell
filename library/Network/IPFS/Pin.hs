@@ -30,13 +30,7 @@ add cid = ipfsPin cid >>= \case
     return <| Left formattedError
 
 -- | Unpin a CID
-rm ::
-  ( MonadIO m
-  , MonadRemoteIPFS  m
-  , MonadLogger      m
-  )
-  => IPFS.CID
-  -> m (Either IPFS.Add.Error CID)
+rm :: (MonadRemoteIPFS m, MonadLogger m) => IPFS.CID -> m (Either IPFS.Add.Error CID)
 rm cid = ipfsUnpin cid False >>= \case
   Right Pin.Response { cids } ->
     case cids of
@@ -53,7 +47,7 @@ rm cid = ipfsUnpin cid False >>= \case
     return <| Right cid
 
 -- | Parse and Log the Servant Client Error returned from the IPFS Daemon
-parseClientError :: (MonadIO m, MonadLogger m) => ClientError -> m Error
+parseClientError :: MonadLogger m => ClientError -> m Error
 parseClientError err = do
   logError <| displayShow err
   return <| case err of
@@ -72,7 +66,7 @@ parseClientError err = do
       UnknownAddErr <| UTF8.textShow unknownClientError
 
 -- | Parse and Log unexpected output when attempting to pin
-parseUnexpectedOutput :: (MonadIO m, MonadLogger m) => Text -> m IPFS.Add.Error
+parseUnexpectedOutput :: MonadLogger m => Text -> m IPFS.Add.Error
 parseUnexpectedOutput errStr = do
   let
     baseError = UnexpectedOutput errStr
