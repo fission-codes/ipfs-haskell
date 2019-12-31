@@ -13,7 +13,7 @@ import           Network.IPFS.Types          as IPFS
 import           Servant.Client.Core
 
 -- | Pin a CID
-add :: (MonadIO m, MonadRemoteIPFS m, MonadLogger m) => IPFS.CID -> m (Either IPFS.Add.Error CID)
+add :: (MonadRemoteIPFS m, MonadLogger m) => IPFS.CID -> m (Either IPFS.Add.Error CID)
 add cid = ipfsPin cid >>= \case
   Right Pin.Response { cids } ->
     case cids of

@@ -18,14 +18,15 @@ import qualified Network.IPFS.Client as IPFS.Client
 import qualified Network.IPFS.Client.Pin as Pin
 import qualified Network.IPFS.File.Types      as File
 
-class Monad m => MonadRemoteIPFS m where
+class MonadIO m => MonadRemoteIPFS m where
   runRemote :: ClientM a       -> m (Either ClientError a)
   ipfsAdd   :: Lazy.ByteString -> m (Either ClientError CID)
   ipfsCat   :: CID             -> m (Either ClientError File.Serialized)
   ipfsPin   :: CID             -> m (Either ClientError Pin.Response)
   ipfsUnpin :: CID -> Bool     -> m (Either ClientError Pin.Response)
+
   -- defaults
   ipfsAdd raw                   = runRemote <| IPFS.Client.add raw
-  ipfsCat (CID cid)             = runRemote <| IPFS.Client.cat cid
-  ipfsPin (CID cid)             = runRemote <| IPFS.Client.pin cid
+  ipfsCat   (CID cid)           = runRemote <| IPFS.Client.cat cid
+  ipfsPin   (CID cid)           = runRemote <| IPFS.Client.pin cid
   ipfsUnpin (CID cid) recursive = runRemote <| IPFS.Client.unpin cid recursive
