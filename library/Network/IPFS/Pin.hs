@@ -13,13 +13,7 @@ import           Network.IPFS.Types          as IPFS
 import           Servant.Client.Core
 
 -- | Pin a CID
-add ::
-  ( MonadRIO cfg m
-  , MonadRemoteIPFS m
-  , MonadLogger     m
-  )
-  => IPFS.CID
-  -> m (Either IPFS.Add.Error CID)
+add :: (MonadRemoteIPFS m, MonadLogger m) => IPFS.CID -> m (Either IPFS.Add.Error CID)
 add cid = ipfsPin cid >>= \case
   Right Pin.Response { cids } ->
     case cids of
@@ -36,13 +30,7 @@ add cid = ipfsPin cid >>= \case
     return <| Left formattedError
 
 -- | Unpin a CID
-rm ::
-  ( MonadRIO cfg m
-  , MonadRemoteIPFS  m
-  , MonadLogger      m
-  )
-  => IPFS.CID
-  -> m (Either IPFS.Add.Error CID)
+rm :: (MonadRemoteIPFS m, MonadLogger m) => IPFS.CID -> m (Either IPFS.Add.Error CID)
 rm cid = ipfsUnpin cid False >>= \case
   Right Pin.Response { cids } ->
     case cids of
@@ -59,36 +47,26 @@ rm cid = ipfsUnpin cid False >>= \case
     return <| Right cid
 
 -- | Parse and Log the Servant Client Error returned from the IPFS Daemon
-parseClientError ::
-  ( MonadRIO        cfg m
-  , MonadLogger     m
-  )
-  => ClientError
-  -> m Error
+parseClientError :: MonadLogger m => ClientError -> m Error
 parseClientError err = do
   logError <| displayShow err
   return <| case err of
-        FailureResponse _ response ->
-          response
-          |> responseBody
-          |> decode
-          |> \case
-            Just IPFS.ErrorBody {message} ->
-              IPFSDaemonErr <| UTF8.textShow message
+    FailureResponse _ response ->
+      response
+        |> responseBody
+        |> decode
+        |> \case
+          Just IPFS.ErrorBody {message} ->
+            IPFSDaemonErr <| UTF8.textShow message
 
-            _ ->
-              UnexpectedOutput <| UTF8.textShow err
+          _ ->
+            UnexpectedOutput <| UTF8.textShow err
 
-        unknownClientError ->
-          UnknownAddErr <| UTF8.textShow unknownClientError
+    unknownClientError ->
+      UnknownAddErr <| UTF8.textShow unknownClientError
 
 -- | Parse and Log unexpected output when attempting to pin
-parseUnexpectedOutput ::
-  ( MonadRIO cfg m
-  , MonadLogger m
-  )
-  => Text
-  -> m IPFS.Add.Error
+parseUnexpectedOutput :: MonadLogger m => Text -> m IPFS.Add.Error
 parseUnexpectedOutput errStr = do
   let
     baseError = UnexpectedOutput errStr

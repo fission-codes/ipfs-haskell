@@ -4,10 +4,10 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 14f82edf93cb461066e99b82feb95e4df111c734b0e724a3a78a384ab85b9ff1
+-- hash: 57e69b16ed496b39a019d745c36aca0c13d5eca31deb91fbf3503b2fd1852e90
 
 name:           ipfs
-version:        1.0.0
+version:        1.0.1
 synopsis:       Access IPFS locally and remotely
 description:    Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
 category:       Network
@@ -44,7 +44,6 @@ library
       Network.IPFS.Client.Error.Types
       Network.IPFS.Client.Param
       Network.IPFS.Client.Pin
-      Network.IPFS.Config
       Network.IPFS.DAG
       Network.IPFS.DAG.Link
       Network.IPFS.DAG.Link.Types
@@ -56,7 +55,6 @@ library
       Network.IPFS.Get.Error
       Network.IPFS.Ignored.Types
       Network.IPFS.Info.Types
-      Network.IPFS.Internal.Constraint
       Network.IPFS.Internal.Orphanage.ByteString.Lazy
       Network.IPFS.Internal.Orphanage.Natural
       Network.IPFS.Internal.Orphanage.Utf8Builder
@@ -79,7 +77,8 @@ library
       Network.IPFS.Timeout.Types
       Network.IPFS.Types
       Network.IPFS.URL.Types
-  other-modules:
+      Paths_ipfs
+  autogen-modules:
       Paths_ipfs
   hs-source-dirs:
       library

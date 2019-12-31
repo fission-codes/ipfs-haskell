@@ -10,5 +10,5 @@ import           Network.IPFS.Prelude
 instance MimeRender PlainText Lazy.ByteString where
   mimeRender _proxy = identity
 
-instance FromJSON ByteString where
-  parseJSON = withText "ByteString" (pure . encodeUtf8)
+instance FromJSON Lazy.ByteString where
+  parseJSON = withText "ByteString" (pure . Lazy.fromStrict . encodeUtf8)
