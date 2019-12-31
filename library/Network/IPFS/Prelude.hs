@@ -4,7 +4,6 @@ module Network.IPFS.Prelude
   , module Control.Monad.Logger
   , module Data.Aeson
   , module Data.Has
-  , module Network.IPFS.Internal.Constraint
   , module Flow
   , module RIO
   , module RIO.Process
@@ -21,7 +20,6 @@ import Control.Monad.Logger (MonadLogger (..), ToLogStr (..), LogLevel (..), log
 import Data.Aeson
 import Data.Has
 
-import Network.IPFS.Internal.Constraint
 import Network.IPFS.Internal.Orphanage.Utf8Builder ()
 
 import Flow

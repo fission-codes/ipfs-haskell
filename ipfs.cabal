@@ -4,7 +4,7 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 14f82edf93cb461066e99b82feb95e4df111c734b0e724a3a78a384ab85b9ff1
+-- hash: 05c28fda085880850e02935ac83ba69af16238ea683160a470e54fa5c469d717
 
 name:           ipfs
 version:        1.0.0
@@ -56,7 +56,6 @@ library
       Network.IPFS.Get.Error
       Network.IPFS.Ignored.Types
       Network.IPFS.Info.Types
-      Network.IPFS.Internal.Constraint
       Network.IPFS.Internal.Orphanage.ByteString.Lazy
       Network.IPFS.Internal.Orphanage.Natural
       Network.IPFS.Internal.Orphanage.Utf8Builder
@@ -79,7 +78,8 @@ library
       Network.IPFS.Timeout.Types
       Network.IPFS.Types
       Network.IPFS.URL.Types
-  other-modules:
+      Paths_ipfs
+  autogen-modules:
       Paths_ipfs
   hs-source-dirs:
       library
