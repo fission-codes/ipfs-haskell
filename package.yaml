@@ -79,7 +79,7 @@ default-extensions:
 
 dependencies:
   - aeson
-  - base
+  - base < 5
   - bytestring
   - envy
   - flow
