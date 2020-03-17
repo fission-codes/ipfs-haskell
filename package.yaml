@@ -1,17 +1,17 @@
 name: ipfs
-version: '1.1.0'
+version: '1.0.2'
 synopsis: Access IPFS locally and remotely
 description: Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
 category: Network
 author:
   - Brooklyn Zelenka
   - Daniel Holmgren
-  - Ben Church
+  - Steven Vandevelde
 maintainer:
   - brooklyn@fission.codes
   - daniel@fission.codes
-  - ben@fission.codes
-copyright: © 2019 Fission Internet Software Services for Open Networks Inc.
+  - steven@fission.codes
+copyright: © 2020 Fission Internet Software Services for Open Networks Inc.
 license: AGPL-3.0-or-later
 license-file: LICENSE
 github: fission-suite/ipfs-haskell
@@ -79,20 +79,17 @@ default-extensions:
 
 dependencies:
   - aeson
-  - base < 5
+  - base
   - bytestring
-  - data-has
   - envy
   - flow
   - Glob
-  - http-client
   - ip
   - lens
   - monad-logger
   - regex-compat
   - rio
   - servant-client
-  - servant-client-core
   - servant-server
   - swagger2
   - text

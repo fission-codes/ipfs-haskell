@@ -10,7 +10,7 @@ import qualified Network.IPFS.Internal.UTF8       as UTF8
 import qualified Network.IPFS.Client.Pin     as Pin
 import           Network.IPFS.Add.Error      as IPFS.Add
 import           Network.IPFS.Types          as IPFS
-import           Servant.Client.Core
+import           Servant.Client
 
 -- | Pin a CID
 add :: (MonadRemoteIPFS m, MonadLogger m) => IPFS.CID -> m (Either IPFS.Add.Error CID)

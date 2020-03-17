@@ -3,7 +3,6 @@ module Network.IPFS.Prelude
   ( module Control.Lens
   , module Control.Monad.Logger
   , module Data.Aeson
-  , module Data.Has
   , module Flow
   , module RIO
   , module RIO.Process
@@ -18,7 +17,6 @@ module Network.IPFS.Prelude
 import Control.Lens         ((%~), (.~), (?~), (^?))
 import Control.Monad.Logger (MonadLogger (..), ToLogStr (..), LogLevel (..), logWithoutLoc)
 import Data.Aeson
-import Data.Has
 
 import Network.IPFS.Internal.Orphanage.Utf8Builder ()
 
