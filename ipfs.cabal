@@ -4,7 +4,7 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 57e69b16ed496b39a019d745c36aca0c13d5eca31deb91fbf3503b2fd1852e90
+-- hash: 14f29c4437fb01b9281eeb7298c11ed37683b8d56de715898ba6a6212e46449a
 
 name:           ipfs
 version:        1.0.1
@@ -100,7 +100,6 @@ library
     , rio
     , servant-client
     , servant-client-core
-    , servant-multipart
     , servant-server
     , swagger2
     , text
@@ -137,7 +136,6 @@ test-suite fission-doctest
     , rio
     , servant-client
     , servant-client-core
-    , servant-multipart
     , servant-server
     , swagger2
     , text

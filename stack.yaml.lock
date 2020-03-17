@@ -13,7 +13,7 @@ packages:
     hackage: Glob-0.10.0
 snapshots:
 - completed:
-    size: 525663
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/14/14.yaml
-    sha256: 6edc48df46eb8bf7b861e98dd30d021a92c2e1820c9bb6528aac5d997b0e14ef
-  original: lts-14.14
+    size: 491373
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/15/3.yaml
+    sha256: 29e9ff61b8bf4b4fcff55cde3ac106ebb971f0d21331dccac9eee63374fa6ca8
+  original: lts-15.3
