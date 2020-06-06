@@ -7,16 +7,16 @@ module Network.IPFS.Client.Pin
 
 import Servant
 
-import           Network.IPFS.Prelude
 import           Network.IPFS.CID.Types
 import qualified Network.IPFS.Client.Param as Param
+import           Network.IPFS.Prelude
 
 type API = AddAPI :<|> RemoveAPI
 
 type AddAPI
   = "add"
     :> Param.CID
-    :> Put '[JSON] Response
+    :> Post '[JSON] Response
 
 type RemoveAPI
   = "rm"
