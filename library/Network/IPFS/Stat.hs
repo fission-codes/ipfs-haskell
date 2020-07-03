@@ -1,6 +1,7 @@
 module Network.IPFS.Stat 
   ( getStatRemote
   , getSize
+  , module Network.IPFS.Stat.Types
   ) where
 
 import           Data.ByteString.Lazy.Char8 as CL
@@ -13,9 +14,11 @@ import           Network.IPFS.Local.Class   as IPFS
 import           Network.IPFS.Remote.Class  as Remote
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 
-import           Network.IPFS.Get.Error as IPFS.Get
+import           Network.IPFS.Get.Error     as IPFS.Get
 import qualified Network.IPFS.Process.Error as Process
-import           Network.IPFS.Types     as IPFS
+
+import           Network.IPFS.Types as IPFS
+import           Network.IPFS.Stat.Types 
 
 getStatRemote :: 
      MonadRemoteIPFS m
