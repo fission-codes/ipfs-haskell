@@ -1,5 +1,6 @@
 module Network.IPFS.Stat 
   ( getStatRemote
+  , getSizeRemote
   , getSize
   , module Network.IPFS.Stat.Types
   ) where
@@ -24,12 +25,22 @@ getStatRemote ::
      MonadRemoteIPFS m
   => IPFS.CID 
   -> m (Either IPFS.Get.Error Stat)
-getStatRemote cid = Remote.ipfsStat cid >>= \case
-  Left err -> 
-    return . Left . UnexpectedOutput <| UTF8.textShow err
+getStatRemote cid = 
+  Remote.ipfsStat cid >>= \case
+    Left err -> 
+      return . Left . UnexpectedOutput <| UTF8.textShow err
 
-  Right stat -> 
-    return <| Right stat
+    Right stat -> 
+      return <| Right stat
+
+getSizeRemote :: 
+     MonadRemoteIPFS m
+  => IPFS.CID 
+  -> m (Either IPFS.Get.Error Natural)
+getSizeRemote cid = 
+  getStatRemote cid >>= \case
+    Left err -> return <| Left err
+    Right stat -> return . Right <| cumulativeSize stat
 
 getSize ::
   MonadLocalIPFS m
