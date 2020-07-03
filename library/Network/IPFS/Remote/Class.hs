@@ -18,7 +18,7 @@ import           Network.IPFS.Types as IPFS
 import qualified Network.IPFS.Client as IPFS.Client
 import qualified Network.IPFS.Client.Pin as Pin
 import qualified Network.IPFS.File.Types      as File
-import           Network.IPFS.Stat.Types
+
 
 class MonadIO m => MonadRemoteIPFS m where
   runRemote :: ClientM a       -> m (Either ClientError a)

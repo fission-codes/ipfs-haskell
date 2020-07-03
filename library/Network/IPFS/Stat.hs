@@ -1,4 +1,7 @@
-module Network.IPFS.Stat (getSize) where
+module Network.IPFS.Stat 
+  ( getStatRemote
+  , getSize
+  ) where
 
 import           Data.ByteString.Lazy.Char8 as CL
 import           Data.List as List
@@ -7,11 +10,23 @@ import qualified RIO.ByteString.Lazy as Lazy
 
 import           Network.IPFS.Prelude
 import           Network.IPFS.Local.Class   as IPFS
+import           Network.IPFS.Remote.Class  as Remote
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 
 import           Network.IPFS.Get.Error as IPFS.Get
 import qualified Network.IPFS.Process.Error as Process
 import           Network.IPFS.Types     as IPFS
+
+getStatRemote :: 
+     MonadRemoteIPFS m
+  => IPFS.CID 
+  -> m (Either IPFS.Get.Error Stat)
+getStatRemote cid = Remote.ipfsStat cid >>= \case
+  Left err -> 
+    return . Left . UnexpectedOutput <| UTF8.textShow err
+
+  Right stat -> 
+    return <| Right stat
 
 getSize ::
   MonadLocalIPFS m
