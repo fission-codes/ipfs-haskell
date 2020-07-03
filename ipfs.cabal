@@ -4,7 +4,7 @@ cabal-version: 2.2
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d79f28e406228fbeaa7826c3fac340acbbf0d3a3107faa904cb50ef8eb5d6e45
+-- hash: 87a81f37a3356aa9b7dc76bdc68728f4a20aa0918e378802565fe0329cff619a
 
 name:           ipfs
 version:        1.0.3
