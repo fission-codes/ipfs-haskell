@@ -20,6 +20,7 @@ import qualified Network.IPFS.Process.Error as Process
 
 import           Network.IPFS.Types as IPFS
 import           Network.IPFS.Stat.Types 
+import           Network.IPFS.Bytes.Types 
 
 getStatRemote :: 
      MonadRemoteIPFS m
@@ -36,7 +37,7 @@ getStatRemote cid =
 getSizeRemote :: 
      MonadRemoteIPFS m
   => IPFS.CID 
-  -> m (Either IPFS.Get.Error Natural)
+  -> m (Either IPFS.Get.Error Bytes)
 getSizeRemote cid = 
   getStatRemote cid >>= \case
     Left err -> return <| Left err

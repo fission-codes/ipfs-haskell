@@ -1,14 +1,15 @@
 module Network.IPFS.Stat.Types (Stat(..)) where
 
 import Network.IPFS.Prelude
+import Network.IPFS.Bytes.Types
 
 
 data Stat = Stat 
-  { blockSize      :: Natural
-  , cumulativeSize :: Natural
-  , dataSize       :: Natural
+  { blockSize      :: Bytes
+  , cumulativeSize :: Bytes
+  , dataSize       :: Bytes
   , hash           :: Text
-  , linksSize      :: Natural
+  , linksSize      :: Bytes
   , numLinks       :: Natural
   }
 
