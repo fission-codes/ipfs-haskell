@@ -16,6 +16,8 @@ module Network.IPFS.Types
   , Ignored
   , Gateway (..)
   , ErrorBody (..)
+  , Stat (..)
+  , Bytes (..)
   ) where
 
 import Network.IPFS.BinPath.Types
@@ -30,3 +32,5 @@ import Network.IPFS.URL.Types
 import Network.IPFS.Ignored.Types
 import Network.IPFS.Gateway.Types
 import Network.IPFS.Client.Error.Types
+import Network.IPFS.Stat.Types
+import Network.IPFS.Bytes.Types

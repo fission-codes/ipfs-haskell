@@ -1,5 +1,3 @@
-![](https://github.com/fission-suite/PROJECTNAME/raw/master/assets/logo.png?sanitize=true)
-
 # ipfs-haskell
 
 [![Build Status](https://travis-ci.org/fission-suite/PROJECTNAME.svg?branch=master)](https://travis-ci.org/fission-suite/ipfs-haskell)
