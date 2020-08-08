@@ -1,13 +1,11 @@
 cabal-version: 2.2
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.2.
 --
 -- see: https://github.com/sol/hpack
---
--- hash: 71fe6bdbacb97fbf90cb0fdb685eb89f0a33a63529b54e223bb7c5b89c99fc03
 
 name:           ipfs
-version:        1.0.3
+version:        1.1.1
 synopsis:       Access IPFS locally and remotely
 description:    Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
 category:       Network

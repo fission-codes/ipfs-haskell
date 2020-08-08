@@ -2,19 +2,37 @@
 # Created by https://www.gitignore.io/api/elm,vim,node,xcode,ocaml,linux,macos,emacs,elixir,phoenix,windows,haskell,reasonml,reactnative,sublimetext,visualstudio,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=elm,vim,node,xcode,ocaml,linux,macos,emacs,elixir,phoenix,windows,haskell,reasonml,reactnative,sublimetext,visualstudio,visualstudiocode
 
-### Elixir ###
-/_build
-/cover
-/deps
-/doc
-/.fetch
-erl_crash.dump
-*.ez
-*.beam
-/config/*.secret.exs
-.elixir_ls/
+result
 
-### Elixir Patch ###
+# Created by https://www.toptal.com/developers/gitignore/api/haskell
+# Edit at https://www.toptal.com/developers/gitignore?templates=haskell
+
+### Haskell ###
+dist
+dist-*
+cabal-dev
+*.o
+*.hi
+*.hie
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+.hpc
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+*.prof
+*.aux
+*.hp
+*.eventlog
+.stack-work/
+cabal.project.local
+cabal.project.local~
+.HTF/
+.ghc.environment.*
+
+# End of https://www.toptal.com/developers/gitignore/api/haskell
 
 ### Elm ###
 # elm-package generated files
