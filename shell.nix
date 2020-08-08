@@ -7,6 +7,7 @@ in
 pkgs.mkShell {
   buildInputs = [
     pkgs.gnumake
+    pkgs.zlib
 
     # Haskell
     unstable.ghcid
