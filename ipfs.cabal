@@ -1,0 +1,139 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.34.2.
+--
+-- see: https://github.com/sol/hpack
+
+name:           ipfs
+version:        1.1.1
+synopsis:       Access IPFS locally and remotely
+description:    Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
+category:       Network
+homepage:       https://github.com/fission-suite/ipfs-haskell#readme
+bug-reports:    https://github.com/fission-suite/ipfs-haskell/issues
+author:         Brooklyn Zelenka,
+                Daniel Holmgren,
+                Steven Vandevelde
+maintainer:     brooklyn@fission.codes,
+                daniel@fission.codes,
+                steven@fission.codes
+copyright:      © 2020 Fission Internet Software Services for Open Networks Inc.
+license:        AGPL-3.0-or-later
+license-file:   LICENSE
+tested-with:    GHC==8.6.5
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/fission-suite/ipfs-haskell
+
+library
+  exposed-modules:
+      Network.IPFS
+      Network.IPFS.Add
+      Network.IPFS.Add.Error
+      Network.IPFS.BinPath.Types
+      Network.IPFS.Bytes.Types
+      Network.IPFS.CID.Types
+      Network.IPFS.Client
+      Network.IPFS.Client.Add
+      Network.IPFS.Client.Cat
+      Network.IPFS.Client.Error.Types
+      Network.IPFS.Client.Param
+      Network.IPFS.Client.Pin
+      Network.IPFS.Client.Stat
+      Network.IPFS.DAG
+      Network.IPFS.DAG.Link
+      Network.IPFS.DAG.Link.Types
+      Network.IPFS.DAG.Node.Types
+      Network.IPFS.Error
+      Network.IPFS.File.Types
+      Network.IPFS.Gateway.Types
+      Network.IPFS.Get
+      Network.IPFS.Get.Error
+      Network.IPFS.Ignored.Types
+      Network.IPFS.Info.Types
+      Network.IPFS.Internal.Orphanage.ByteString.Lazy
+      Network.IPFS.Internal.Orphanage.Natural
+      Network.IPFS.Internal.Orphanage.Utf8Builder
+      Network.IPFS.Internal.UTF8
+      Network.IPFS.Local.Class
+      Network.IPFS.Name.Types
+      Network.IPFS.Path.Types
+      Network.IPFS.Peer
+      Network.IPFS.Peer.Error
+      Network.IPFS.Peer.Types
+      Network.IPFS.Pin
+      Network.IPFS.Prelude
+      Network.IPFS.Process
+      Network.IPFS.Process.Error
+      Network.IPFS.Process.Types
+      Network.IPFS.Remote.Class
+      Network.IPFS.SparseTree
+      Network.IPFS.SparseTree.Types
+      Network.IPFS.Stat
+      Network.IPFS.Stat.Types
+      Network.IPFS.Timeout.Types
+      Network.IPFS.Types
+      Network.IPFS.URL.Types
+      Paths_ipfs
+  autogen-modules:
+      Paths_ipfs
+  hs-source-dirs:
+      library
+  default-extensions: ApplicativeDo BangPatterns BinaryLiterals BlockArguments ConstraintKinds DataKinds DeriveAnyClass DeriveFoldable DeriveFunctor DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies DuplicateRecordFields FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving KindSignatures LambdaCase LiberalTypeSynonyms MultiParamTypeClasses MultiWayIf NamedFieldPuns NoImplicitPrelude NoMonomorphismRestriction OverloadedStrings OverloadedLabels OverloadedLists PostfixOperators RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TupleSections TypeApplications TypeFamilies TypeSynonymInstances TemplateHaskell TypeOperators ViewPatterns
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wpartial-fields -Wredundant-constraints -fhide-source-paths
+  build-depends:
+      Glob
+    , aeson
+    , base <5
+    , bytestring
+    , envy
+    , flow
+    , ip
+    , lens
+    , monad-logger
+    , regex-compat
+    , rio
+    , servant-client
+    , servant-server
+    , swagger2
+    , text
+    , vector
+  default-language: Haskell2010
+
+test-suite fission-doctest
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Paths_ipfs
+  hs-source-dirs:
+      test/doctest
+  default-extensions: ApplicativeDo BangPatterns BinaryLiterals BlockArguments ConstraintKinds DataKinds DeriveAnyClass DeriveFoldable DeriveFunctor DeriveGeneric DeriveLift DeriveTraversable DerivingStrategies DuplicateRecordFields FlexibleContexts FlexibleInstances FunctionalDependencies GADTs GeneralizedNewtypeDeriving KindSignatures LambdaCase LiberalTypeSynonyms MultiParamTypeClasses MultiWayIf NamedFieldPuns NoImplicitPrelude NoMonomorphismRestriction OverloadedStrings OverloadedLabels OverloadedLists PostfixOperators RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TupleSections TypeApplications TypeFamilies TypeSynonymInstances TemplateHaskell TypeOperators ViewPatterns
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wpartial-fields -Wredundant-constraints -fhide-source-paths -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Glob
+    , QuickCheck
+    , aeson
+    , base <5
+    , bytestring
+    , directory
+    , directory-tree
+    , doctest
+    , envy
+    , flow
+    , ip
+    , lens
+    , lens-aeson
+    , monad-logger
+    , regex-compat
+    , rio
+    , servant-client
+    , servant-server
+    , swagger2
+    , text
+    , vector
+    , yaml
+  default-language: Haskell2010
