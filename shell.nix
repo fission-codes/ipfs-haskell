@@ -24,23 +24,6 @@ in
     buildInputs = with pkgs.haskellPackages;
       [
         ghcid stm
-        aeson
-        # base
-        bytestring
-        envy
-        flow
-        Glob
-        ip
-        lens
-        monad-logger
-        regex-compat
-        rio
-        servant-client
-        servant-server
-        stm
-        swagger2
-        text
-        vector
       ];
 
     # Prevents cabal from choosing alternate plans, so that

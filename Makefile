@@ -3,40 +3,41 @@ package = ipfs
 stack_yaml = STACK_YAML="stack.yaml"
 stack = $(stack_yaml) stack
 
+setup:
+	stack install ghcid
+
 build:
 	$(stack) build --fast $(package):lib
 
 release:
 	$(stack) build
 
-dirty:
-	$(stack) build --ghc-options=-fforce-recomp $(package)
+docs:
+	$(stack) haddock $(package) --open
 
-profile:
-	$(stack) --work-dir .stack-work-profiling --profile build --fast
+docserver:
+	http-server ./.stack-work/dist/x86_64-osx/Cabal-3.0.1.0/doc/html/$(package) -p 1313 & \
+    open http://localhost:1313
 
-install:
-	$(stack) install --fast
+doctest:
+	$(stack) test :fission-doctest --fast
 
-ghci:
-	$(stack) repl $(package):lib --no-build --no-load --ghci-options='-j6 +RTS -A128m'
+unit-test:
+	$(stack) test :fission-test --fast
 
 test:
-	$(stack) build --test --fast $(package)
+	make unit-test && make doctest
 
 test-ghci:
 	$(stack) ghci $(package):test:$(package)-tests --ghci-options='-j6 +RTS -A128m'
 
 bench:
-	$(stack) build --fast --bench $(package)
+	$(stack) build --bench $(package)
 
 dev:
-	$(stack) exec -- ghcid -c "stack ghci $(package):lib --test --main-is $(package)"
+	$(stack) exec -- ghcid -c "stack ghci $(package):lib --test"
 
 live:
 	$(stack) exec -- yesod devel
 
-setup:
-	stack install ghcid && stack install yesod-bin
-
-.PHONY : build dirty run install ghci test test-ghci watch
+.PHONY : build dirty run install ghci test test-ghci watch doctest lint
