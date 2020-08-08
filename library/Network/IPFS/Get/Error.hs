@@ -33,4 +33,4 @@ instance Display Error where
       "Unexpected IPFS output: " <> display raw
 
     UnknownErr raw ->
-      "Unknwon IPFS get error: " <> display raw
+      "Unknown IPFS get error: " <> display raw
