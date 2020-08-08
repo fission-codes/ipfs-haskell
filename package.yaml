@@ -84,7 +84,7 @@ dependencies:
   - envy
   - flow
   - Glob
-  - ip
+  - ip == 1.7.2
   - lens
   - monad-logger
   - regex-compat
