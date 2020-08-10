@@ -18,11 +18,13 @@ type AddAPI
     :> Param.CID
     :> Post '[JSON] Response
 
+-- IPFS v0.5 disallows GET requests
+-- https://docs.ipfs.io/recent-releases/go-ipfs-0-5/#breaking-changes-upgrade-notes
 type RemoveAPI
   = "rm"
     :> Param.CID
     :> Param.IsRecursive
-    :> Delete '[JSON] Response
+    :> Post '[JSON] Response
 
 newtype Response = Response { cids :: [CID] }
   deriving (Eq, Show)
