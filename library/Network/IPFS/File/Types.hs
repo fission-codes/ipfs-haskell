@@ -3,16 +3,16 @@ module Network.IPFS.File.Types (Serialized (..)) where
 
 import qualified Data.ByteString.Builder as Builder
 import           Data.Swagger
+import qualified RIO.ByteString.Lazy     as Lazy
 import           Servant
-import qualified RIO.ByteString.Lazy as Lazy
 
 import Network.IPFS.Prelude
 
 -- | A file serialized as a lazy bytestring
 newtype Serialized = Serialized { unserialize :: Lazy.ByteString }
   deriving         ( Eq
-                    , Show
-                    )
+                   , Show
+                   )
   deriving newtype ( IsString )
 
 instance ToSchema Serialized where
