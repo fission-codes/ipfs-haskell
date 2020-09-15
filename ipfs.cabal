@@ -5,7 +5,7 @@ cabal-version: 2.2
 -- see: https://github.com/sol/hpack
 
 name:           ipfs
-version:        1.1.3
+version:        1.1.3.1
 synopsis:       Access IPFS locally and remotely
 description:    Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
 category:       Network
@@ -97,6 +97,7 @@ library
     , monad-logger
     , regex-compat
     , rio
+    , servant
     , servant-client
     , servant-server
     , swagger2
@@ -130,6 +131,7 @@ test-suite fission-doctest
     , monad-logger
     , regex-compat
     , rio
+    , servant
     , servant-client
     , servant-server
     , swagger2
