@@ -4,7 +4,7 @@ module Network.IPFS.File.Types (Serialized (..)) where
 import qualified Data.ByteString.Builder as Builder
 import           Data.Swagger
 import qualified RIO.ByteString.Lazy     as Lazy
-import           Servant
+import           Servant.API
 
 import Network.IPFS.Prelude
 
