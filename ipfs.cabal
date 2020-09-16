@@ -60,6 +60,7 @@ library
       Network.IPFS.Internal.Orphanage.Utf8Builder
       Network.IPFS.Internal.UTF8
       Network.IPFS.Local.Class
+      Network.IPFS.MIME.RawPlainText.Types
       Network.IPFS.Name.Types
       Network.IPFS.Path.Types
       Network.IPFS.Peer
@@ -92,6 +93,7 @@ library
     , bytestring
     , envy
     , flow
+    , http-media
     , ip
     , lens
     , monad-logger
@@ -125,6 +127,7 @@ test-suite fission-doctest
     , doctest
     , envy
     , flow
+    , http-media
     , ip
     , lens
     , lens-aeson
