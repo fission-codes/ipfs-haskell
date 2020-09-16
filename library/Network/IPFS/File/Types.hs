@@ -50,4 +50,3 @@ instance MimeUnrender RawPlainText Serialized where
 
 instance MimeUnrender OctetStream Serialized where
   mimeUnrender _proxy = Right . Serialized
-
