@@ -4,8 +4,10 @@ module Network.IPFS.File.Types (Serialized (..)) where
 import qualified Data.ByteString.Builder as Builder
 import           Data.Swagger
 import qualified RIO.ByteString.Lazy     as Lazy
-import           Servant.API
 
+import Servant.API
+
+import Network.IPFS.MIME.RawPlainText.Types
 import Network.IPFS.Prelude
 
 -- | A file serialized as a lazy bytestring
@@ -27,14 +29,25 @@ instance ToSchema Serialized where
 instance Display Serialized where
   display = Utf8Builder . Builder.lazyByteString . unserialize
 
+-----
+
 instance MimeRender PlainText Serialized where
   mimeRender _proxy = unserialize
 
-instance MimeUnrender PlainText Serialized where
-  mimeUnrender _proxy = Right . Serialized
+instance MimeRender RawPlainText Serialized where
+  mimeRender _proxy = unserialize
 
 instance MimeRender OctetStream Serialized where
   mimeRender _proxy = unserialize
 
+-----
+
+instance MimeUnrender PlainText Serialized where
+  mimeUnrender _proxy = Right . Serialized
+
+instance MimeUnrender RawPlainText Serialized where
+  mimeUnrender _proxy = Right . Serialized
+
 instance MimeUnrender OctetStream Serialized where
   mimeUnrender _proxy = Right . Serialized
+
