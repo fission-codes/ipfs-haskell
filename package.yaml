@@ -7,10 +7,12 @@ author:
   - Brooklyn Zelenka
   - Daniel Holmgren
   - Steven Vandevelde
+  - James Walker
 maintainer:
   - brooklyn@fission.codes
   - daniel@fission.codes
   - steven@fission.codes
+  - james@fission.codes
 copyright: © 2020 Fission Internet Software Services for Open Networks Inc.
 license: AGPL-3.0-or-later
 license-file: LICENSE
