@@ -14,33 +14,34 @@ module Network.IPFS.Prelude
   , logOther
   ) where
 
-import Control.Lens         ((%~), (.~), (?~), (^?))
-import Control.Monad.Logger (MonadLogger (..), ToLogStr (..), LogLevel (..), logWithoutLoc)
+import Control.Lens         ((?~))
+import Control.Monad.Logger (LogLevel (..), MonadLogger (..), ToLogStr (..), logWithoutLoc)
 import Data.Aeson
 
 import Network.IPFS.Internal.Orphanage.Utf8Builder ()
 
 import Flow
 
+import RIO         hiding
+    ( Handler
+    , LogLevel (..)
+    , LogSource
+    , id
+    , logDebug
+    , logDebugS
+    , logError
+    , logErrorS
+    , logInfo
+    , logInfoS
+    , logOther
+    , logOtherS
+    , logWarn
+    , logWarnS
+    , timeout
+    , ($)
+    , (&)
+    )
 import RIO.Process
-import RIO hiding ( Handler
-                  , LogLevel (..)
-                  , LogSource
-                  , logDebug
-                  , logDebugS
-                  , logError
-                  , logErrorS
-                  , logInfo
-                  , logInfoS
-                  , logOther
-                  , logOtherS
-                  , logWarn
-                  , logWarnS
-                  , id
-                  , timeout
-                  , ($)
-                  , (&)
-                  )
 
 identity :: a -> a
 identity a = a

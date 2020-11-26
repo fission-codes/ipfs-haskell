@@ -1,9 +1,21 @@
-resolver: lts-15.10
+resolver: lts-16.23
 
 packages:
-- .
+  - .
+
+extra-deps:
+  - bytebuild-0.3.6.0
+  - byteslice-0.2.4.0
+  - bytesmith-0.3.7.0
+  - contiguous-0.5.1
+  - ip-1.7.2
+  - natural-arithmetic-0.1.2.0
+  - primitive-offset-0.2.0.0
+  - primitive-unlifted-0.1.3.0
+  - run-st-0.1.1.0
+  - tuples-0.1.0.0
 
 nix:
   enable: true
   packages:
-  - zlib
+    - zlib
