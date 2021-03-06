@@ -8,13 +8,14 @@ import           Servant.API
 import           Network.IPFS.Prelude
 
 import           Network.IPFS.CID.Types
+import qualified Network.IPFS.Client.Param as Param
 
 type PinComplete
   =  "api"
   :> "v0"
   :> "pin"
   :> "add"
-  :> QueryParam "arg"      CID
+  :> Param.CID'
   :> QueryParam "progress" Bool
   :> StreamPost NewlineFraming JSON (SourceIO PinStatus)
 
