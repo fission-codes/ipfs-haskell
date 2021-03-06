@@ -5,26 +5,26 @@ module Network.IPFS.Add
   , addDir
   ) where
 
-import           Network.IPFS.Prelude hiding (link)
-import           Network.IPFS.Local.Class as IPFS
+import           Network.IPFS.Local.Class    as IPFS
+import           Network.IPFS.Prelude        hiding (link)
 
-import           Data.ByteString.Lazy.Char8 as CL
-import           Data.List                  as List
+import           Data.ByteString.Lazy.Char8  as CL
 
-import qualified System.FilePath.Glob as Glob
+import qualified System.FilePath.Glob        as Glob
 
+import qualified RIO.ByteString.Lazy         as Lazy
 import           RIO.Directory
 import           RIO.FilePath
-import qualified RIO.ByteString.Lazy as Lazy
+import qualified RIO.List                    as List
 
-import qualified Network.IPFS.Internal.UTF8 as UTF8
+import qualified Network.IPFS.Internal.UTF8  as UTF8
 
 import           Network.IPFS.Add.Error      as IPFS.Add
-import           Network.IPFS.Types          as IPFS
-import           Network.IPFS.DAG.Node.Types as DAG
 import           Network.IPFS.DAG.Link       as DAG.Link
+import           Network.IPFS.DAG.Node.Types as DAG
+import           Network.IPFS.Types          as IPFS
 
-import           Network.IPFS.DAG as DAG
+import           Network.IPFS.DAG            as DAG
 
 addRaw ::
   MonadLocalIPFS m
@@ -35,18 +35,13 @@ addRaw raw =
     Right result ->
       case CL.lines result of
         [cid] ->
-          cid
-            |> UTF8.textShow
-            |> UTF8.stripN 1
-            |> mkCID
-            |> Right
-            |> return
+          return . Right . mkCID . UTF8.stripN 1 . decodeUtf8Lenient $ Lazy.toStrict cid
 
         bad ->
-          return . Left . UnexpectedOutput <| UTF8.textShow bad
+          return . Left . UnexpectedOutput $ UTF8.textShow bad
 
     Left err ->
-      return . Left . UnknownAddErr <| UTF8.textShow err
+      return . Left . UnknownAddErr $ UTF8.textShow err
 
 addFile ::
   MonadLocalIPFS m
@@ -61,18 +56,18 @@ addFile raw name =
           let
             sparseTree  = Directory [(Hash rootCID, fileWrapper)]
             fileWrapper = Directory [(fileName, Content fileCID)]
-            rootCID     = CID <| UTF8.textShow outer
-            fileCID     = CID . UTF8.stripN 1 <| UTF8.textShow inner
+            rootCID     = CID . decodeUtf8Lenient $ Lazy.toStrict outer
+            fileCID     = CID . UTF8.stripN 1 . decodeUtf8Lenient $ Lazy.toStrict inner
             fileName    = Key name
           in
-            return <| Right (sparseTree, rootCID)
+            return $ Right (sparseTree, rootCID)
 
         bad ->
-          return . Left . UnexpectedOutput <| UTF8.textShow bad
+          return . Left . UnexpectedOutput $ UTF8.textShow bad
 
 
     Left err ->
-      return . Left . UnknownAddErr <| UTF8.textShow err
+      return . Left . UnknownAddErr $ UTF8.textShow err
 
     where
       opts = [ "add"
@@ -88,11 +83,11 @@ addPath ::
 addPath path = IPFS.runLocal ["add", "-HQ", path] "" >>= pure . \case
   Right result ->
     case CL.lines result of
-      [cid] -> Right . mkCID . UTF8.stripN 1 <| UTF8.textShow cid
-      bad   -> Left . UnexpectedOutput <| UTF8.textShow bad
+      [cid] -> Right . mkCID . UTF8.stripN 1 $ UTF8.textShow cid
+      bad   -> Left . UnexpectedOutput $ UTF8.textShow bad
 
   Left err ->
-    Left . UnknownAddErr <| UTF8.textShow err
+    Left . UnknownAddErr $ UTF8.textShow err
 
 addDir ::
   ( MonadIO m
@@ -102,7 +97,7 @@ addDir ::
   -> FilePath
   -> m (Either IPFS.Add.Error IPFS.CID)
 addDir ignored path = doesFileExist path >>= \case
-  True -> addPath path
+  True  -> addPath path
   False -> walkDir ignored path
 
 walkDir ::
@@ -118,13 +113,13 @@ walkDir ignored path = do
   let
     toAdd = removeIgnored ignored files
     reducer = foldResults path ignored
-    seed = Right <| Node
+    seed = Right $ Node
       { dataBlock = "CAE="
       , links = []
       }
 
   foldM reducer seed toAdd >>= \case
-    Left err -> return <| Left err
+    Left err   -> return $ Left err
     Right node -> DAG.putNode node
 
 foldResults ::
@@ -136,15 +131,15 @@ foldResults ::
   -> Either IPFS.Add.Error Node
   -> FilePath
   -> m (Either IPFS.Add.Error Node)
-foldResults _ _ (Left err) _ = return <| Left err
+foldResults _ _ (Left err) _ = return $ Left err
 foldResults path ignored (Right node) filename = do
   addDir ignored (path </> filename) >>= \case
-    Left err ->  return <| Left err
+    Left err ->  return $ Left err
     Right cid ->
       DAG.Link.create cid (IPFS.Name filename) >>= \case
-      Left err -> return . Left <| RecursiveAddErr err
+      Left err -> return . Left $ RecursiveAddErr err
       Right link ->
-        return <| Right <| node { links = link:(links node) }
+        return $ Right node { links = link: links node }
 
 removeIgnored :: IPFS.Ignored -> [FilePath] -> [FilePath]
 removeIgnored ignored files = List.filter (not . matchesAny ignored) files

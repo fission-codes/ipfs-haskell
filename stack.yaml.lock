@@ -5,19 +5,19 @@
 
 packages:
 - completed:
-    hackage: bytebuild-0.3.6.0@sha256:aec785c906db5c7ec730754683196eb99a0d48e0deff7d4034c7b58307040b85,2982
+    hackage: bytebuild-0.3.7.0@sha256:dd3cd96f44670f6c38539d6a6b210afd19a1ff4883f92c96862c33de277f308e,2982
     pantry-tree:
       size: 844
-      sha256: 5e6fd3de57a4d44257fb475433633939459e0294fafe79b21ff67aeb93a81591
+      sha256: 7445e3458b19692565380ea63ffdb4f24f7619e35cff14ed9d6b73707fee4cee
   original:
-    hackage: bytebuild-0.3.6.0
+    hackage: bytebuild-0.3.7.0
 - completed:
-    hackage: byteslice-0.2.4.0@sha256:f40d54191f6def98520ee997e55c959395287f7955b4f975e6475d97f64f9925,2227
+    hackage: byteslice-0.2.5.2@sha256:9f23721c56eb570f0eb0150f0cdc66aa5d1a86eaf8c1f8ab0591ee30781c1a5a,2319
     pantry-tree:
-      size: 1096
-      sha256: 6bf54187d6bf2afcb13de471cac865244a00ba6a0f627127240299ae15154338
+      size: 1167
+      sha256: 688588fc3c46d6522a7c953b5c9ccb60016dd20c551632f71aa5a8ebc60a2b95
   original:
-    hackage: byteslice-0.2.4.0
+    hackage: byteslice-0.2.5.2
 - completed:
     hackage: bytesmith-0.3.7.0@sha256:a11e4ca0fb72cd966c21d82dcc2eb7f3aa748b3fbfe30ab6c7fa8beea38c8e83,1863
     pantry-tree:
@@ -33,12 +33,12 @@ packages:
   original:
     hackage: contiguous-0.5.1
 - completed:
-    hackage: ip-1.7.2@sha256:2148bbc7b5e66ea7273b6014bb30483cc656b2cd4e53efaf165c2223bdbbeb46,3742
+    hackage: ip-1.7.3@sha256:b2557931d271927898a57fae6883486bae29291ea09a6680fd9a176f45016205,3742
     pantry-tree:
       size: 1437
-      sha256: c60e78361b92eebfa341027377787e39de5a16218ab605456cf4cf1de5f58b2a
+      sha256: 28fe2c39f489c3d7315ae098e5500b5a76035d02ed371e7d833c45f74f8d9b38
   original:
-    hackage: ip-1.7.2
+    hackage: ip-1.7.3
 - completed:
     hackage: natural-arithmetic-0.1.2.0@sha256:ac25a0561c8378530a62f02df83680afb193ed1059bb43e3130e0074b5b3f16b,3411
     pantry-tree:
@@ -53,13 +53,6 @@ packages:
       sha256: 6dbc2fbfd70920a1de5a76d3715506edc0895c81a2f7b856d3abb027865d4605
   original:
     hackage: primitive-offset-0.2.0.0
-- completed:
-    hackage: primitive-unlifted-0.1.3.0@sha256:a98f827740f5dcf097d885b3a47c32f4462204449620abc9d51b8c4f8619f9e6,1427
-    pantry-tree:
-      size: 420
-      sha256: c882dca2a96b98d02b0d21875b651edb11ac67d90e736c0de7a92c410a19eb7f
-  original:
-    hackage: primitive-unlifted-0.1.3.0
 - completed:
     hackage: run-st-0.1.1.0@sha256:a43245bb23984089016772481bf52bfe63eaff0c5040303f69c9b15e80872fdc,883
     pantry-tree:
@@ -76,7 +69,7 @@ packages:
     hackage: tuples-0.1.0.0
 snapshots:
 - completed:
-    size: 532832
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/23.yaml
-    sha256: fbb2a0519008533924c7753bd7164ddd1009f09504eb06674acad6049b46db09
-  original: lts-16.23
+    size: 565266
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/17/5.yaml
+    sha256: 78e8ebabf11406261abbc95b44f240acf71802630b368888f6d758de7fc3a2f7
+  original: lts-17.5

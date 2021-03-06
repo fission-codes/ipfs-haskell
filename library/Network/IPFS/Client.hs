@@ -7,21 +7,21 @@ module Network.IPFS.Client
   , unpin
   ) where
 
-import qualified RIO.ByteString.Lazy as Lazy
+import qualified RIO.ByteString.Lazy                             as Lazy
 import           Servant
 import           Servant.Client
 
-import Network.IPFS.Internal.Orphanage.ByteString.Lazy ()
-import Network.IPFS.Prelude                            hiding (object)
+import           Network.IPFS.Internal.Orphanage.ByteString.Lazy ()
+import           Network.IPFS.Prelude                            hiding (object)
 
 import           Network.IPFS.CID.Types
-import qualified Network.IPFS.File.Types as File
+import qualified Network.IPFS.File.Types                         as File
 import           Network.IPFS.Stat.Types
 
-import qualified Network.IPFS.Client.Add  as Add
-import qualified Network.IPFS.Client.Cat  as Cat
-import qualified Network.IPFS.Client.Pin  as Pin
-import qualified Network.IPFS.Client.Stat as Stat
+import qualified Network.IPFS.Client.Add                         as Add
+import qualified Network.IPFS.Client.Cat                         as Cat
+import qualified Network.IPFS.Client.Pin                         as Pin
+import qualified Network.IPFS.Client.Stat                        as Stat
 
 type API
   = "api"
@@ -34,13 +34,13 @@ type V0API = "add"    :> Add.API
         :<|> "pin"    :> Pin.API
 
 add   :: Lazy.ByteString -> ClientM CID
-cat   :: Text            -> ClientM File.Serialized
-stat  :: Text            -> ClientM Stat
-pin   :: Text            -> ClientM Pin.Response
-unpin :: Text -> Bool    -> ClientM Pin.Response
+cat   :: CID             -> ClientM File.Serialized
+stat  :: CID             -> ClientM Stat
+pin   :: CID             -> ClientM Pin.Response
+unpin :: CID -> Bool     -> ClientM Pin.Response
 
 add :<|> cat
     :<|> stat
     :<|> pin
     :<|> unpin
-    = client <| Proxy @API
+    = client $ Proxy @API
