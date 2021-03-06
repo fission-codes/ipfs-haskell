@@ -5,8 +5,6 @@ module Network.IPFS.Client.Param
 
 import           Servant
 
-import           Network.IPFS.Prelude
-
 import           Network.IPFS.CID.Types
 
 type CID' = QueryParam' '[Required, Strict] "arg" CID
