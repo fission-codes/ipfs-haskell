@@ -8,12 +8,12 @@ module Network.IPFS.Remote.Class
   , ipfsUnpin
   ) where
 
-import Network.IPFS.Prelude
+import           Network.IPFS.Prelude
 
-import qualified RIO.ByteString.Lazy as Lazy
+import qualified RIO.ByteString.Lazy     as Lazy
 import           Servant.Client
 
-import Network.IPFS.Types as IPFS
+import           Network.IPFS.Types      as IPFS
 
 import qualified Network.IPFS.Client     as IPFS.Client
 import qualified Network.IPFS.Client.Pin as Pin
@@ -28,8 +28,8 @@ class MonadIO m => MonadRemoteIPFS m where
   ipfsUnpin :: CID -> Bool     -> m (Either ClientError Pin.Response)
 
   -- defaults
-  ipfsAdd   raw                 = runRemote <| IPFS.Client.add raw
-  ipfsCat   (CID cid)           = runRemote <| IPFS.Client.cat cid
-  ipfsStat  (CID cid)           = runRemote <| IPFS.Client.stat cid
-  ipfsPin   (CID cid)           = runRemote <| IPFS.Client.pin cid
-  ipfsUnpin (CID cid) recursive = runRemote <| IPFS.Client.unpin cid recursive
+  ipfsAdd   raw           = runRemote $ IPFS.Client.add raw
+  ipfsCat   cid           = runRemote $ IPFS.Client.cat   cid
+  ipfsStat  cid           = runRemote $ IPFS.Client.stat  cid
+  ipfsPin   cid           = runRemote $ IPFS.Client.pin   cid
+  ipfsUnpin cid recursive = runRemote $ IPFS.Client.unpin cid recursive

@@ -3,15 +3,15 @@ module Network.IPFS.CID.Types
   , mkCID
   ) where
 
-import           RIO.Char
 import qualified RIO.ByteString.Lazy as Lazy
+import           RIO.Char
 import qualified RIO.Text            as Text
 
-import           Data.Swagger
-import           Servant
+import Data.Swagger
+import Servant
 
-import           Network.IPFS.Prelude
 import qualified Network.IPFS.Internal.UTF8 as UTF8
+import           Network.IPFS.Prelude
 
 newtype CID = CID { unaddress :: Text }
   deriving          ( Eq
@@ -29,7 +29,7 @@ instance ToJSON CID where
   toJSON (CID cid) = cid |> normalize |> toJSON
     where
       normalize (Text.take 1 -> "\"") = UTF8.stripN 1 cid
-      normalize cid' = cid'
+      normalize cid'                  = cid'
 
 instance FromJSON CID where
   parseJSON = withText "ContentAddress" (pure . CID)
@@ -53,15 +53,15 @@ instance MimeRender OctetStream CID where
 
 instance MimeUnrender PlainText CID where
   mimeUnrender _proxy bs =
-    case bs |> Lazy.toStrict |> decodeUtf8' of
-      Left err  -> Left  <| show err
-      Right txt -> Right <| CID txt
+    case decodeUtf8' $ Lazy.toStrict bs of
+      Left err  -> Left $ show err
+      Right txt -> Right $ CID txt
 
 instance MimeUnrender PlainText [CID] where
   mimeUnrender proxy bs = sequence cids
     where
       cids :: [Either String CID]
-      cids = mimeUnrender proxy <$> Lazy.split (fromIntegral <| ord ',') bs
+      cids = mimeUnrender proxy <$> Lazy.split (fromIntegral $ ord ',') bs
 
 instance FromHttpApiData CID where
   parseUrlPiece = Right . CID

@@ -1,5 +1,5 @@
 name: ipfs
-version: '1.1.5.1'
+version: '1.2.0.0'
 synopsis: Access IPFS locally and remotely
 description: Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
 category: Network
@@ -17,7 +17,7 @@ copyright: © 2020 Fission Internet Software Services for Open Networks Inc.
 license: Apache-2.0
 license-file: LICENSE
 github: fission-suite/ipfs-haskell
-tested-with: GHC==8.8.4
+tested-with: GHC==8.10.4
 extra-source-files:
   - README.md
 
