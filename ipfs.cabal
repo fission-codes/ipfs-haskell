@@ -19,7 +19,7 @@ maintainer:     brooklyn@fission.codes,
                 daniel@fission.codes,
                 steven@fission.codes,
                 james@fission.codes
-copyright:      © 2020 Fission Internet Software Services for Open Networks Inc.
+copyright:      © 2021 Fission Internet Software Services for Open Networks Inc.
 license:        Apache-2.0
 license-file:   LICENSE
 tested-with:
@@ -43,7 +43,6 @@ library
       Network.IPFS.Client
       Network.IPFS.Client.Add
       Network.IPFS.Client.Cat
-      Network.IPFS.Client.DAG
       Network.IPFS.Client.DAG.Put.Types
       Network.IPFS.Client.DAG.Types
       Network.IPFS.Client.Error.Types
