@@ -56,8 +56,5 @@ unstable.haskell.lib.buildStackProject {
 
   shellHook = ''
     export LANG=C.UTF8
-  
-    echo "🌈✨ Welcome to the glorious... "
-    ${pkgs.figlet}/bin/figlet "Fission Build Env" | lolcat -a -s 50
   '';
 }
