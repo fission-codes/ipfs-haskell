@@ -1,5 +1,5 @@
 name: ipfs
-version: '1.2.0.0'
+version: '1.3.0.0'
 synopsis: Access IPFS locally and remotely
 description: Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
 category: Network
@@ -13,7 +13,7 @@ maintainer:
   - daniel@fission.codes
   - steven@fission.codes
   - james@fission.codes
-copyright: © 2020 Fission Internet Software Services for Open Networks Inc.
+copyright: © 2021 Fission Internet Software Services for Open Networks Inc.
 license: Apache-2.0
 license-file: LICENSE
 github: fission-suite/ipfs-haskell
@@ -94,6 +94,7 @@ dependencies:
   - rio
   - servant
   - servant-client
+  - servant-multipart
   - servant-server
   - swagger2
   - text

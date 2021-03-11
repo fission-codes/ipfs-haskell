@@ -5,7 +5,7 @@ cabal-version: 2.0
 -- see: https://github.com/sol/hpack
 
 name:           ipfs
-version:        1.2.0.0
+version:        1.3.0.0
 synopsis:       Access IPFS locally and remotely
 description:    Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
 category:       Network
@@ -19,7 +19,7 @@ maintainer:     brooklyn@fission.codes,
                 daniel@fission.codes,
                 steven@fission.codes,
                 james@fission.codes
-copyright:      © 2020 Fission Internet Software Services for Open Networks Inc.
+copyright:      © 2021 Fission Internet Software Services for Open Networks Inc.
 license:        Apache-2.0
 license-file:   LICENSE
 tested-with:
@@ -43,6 +43,8 @@ library
       Network.IPFS.Client
       Network.IPFS.Client.Add
       Network.IPFS.Client.Cat
+      Network.IPFS.Client.DAG.Put.Types
+      Network.IPFS.Client.DAG.Types
       Network.IPFS.Client.Error.Types
       Network.IPFS.Client.Param
       Network.IPFS.Client.Pin
@@ -53,6 +55,7 @@ library
       Network.IPFS.DAG.Link.Types
       Network.IPFS.DAG.Node.Types
       Network.IPFS.Error
+      Network.IPFS.File.Form.Types
       Network.IPFS.File.Types
       Network.IPFS.Gateway.Types
       Network.IPFS.Get
@@ -147,6 +150,7 @@ library
     , rio
     , servant
     , servant-client
+    , servant-multipart
     , servant-server
     , swagger2
     , text
@@ -224,6 +228,7 @@ test-suite fission-doctest
     , rio
     , servant
     , servant-client
+    , servant-multipart
     , servant-server
     , swagger2
     , text
