@@ -3,18 +3,7 @@ resolver: lts-17.5
 packages:
   - .
 
-extra-deps:
-  - bytebuild-0.3.7.0
-  - byteslice-0.2.5.2
-  - bytesmith-0.3.7.0
-  - contiguous-0.5.1
-  - ip-1.7.3
-  - natural-arithmetic-0.1.2.0
-  - primitive-offset-0.2.0.0
-  - run-st-0.1.1.0
-  - tuples-0.1.0.0
-
 nix:
-  enable:     true
+  enable:     false
   pure:       true
   shell-file: shell.nix

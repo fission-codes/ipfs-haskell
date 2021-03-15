@@ -1,5 +1,5 @@
 name: ipfs
-version: '1.3.0.0'
+version: '1.3.0.1'
 synopsis: Access IPFS locally and remotely
 description: Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
 category: Network
@@ -87,9 +87,9 @@ dependencies:
   - flow
   - Glob
   - http-media
-  - ip
   - lens
   - monad-logger
+  - network-ip
   - regex-compat
   - rio
   - servant
