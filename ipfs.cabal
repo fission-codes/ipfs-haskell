@@ -5,7 +5,7 @@ cabal-version: 2.0
 -- see: https://github.com/sol/hpack
 
 name:           ipfs
-version:        1.3.0.0
+version:        1.4.0.0
 synopsis:       Access IPFS locally and remotely
 description:    Interact with the IPFS network by shelling out to a local IPFS node or communicating via the HTTP interface of a remote IPFS node.
 category:       Network
@@ -22,9 +22,9 @@ maintainer:     brooklyn@fission.codes,
 copyright:      © 2021 Fission Internet Software Services for Open Networks Inc.
 license:        Apache-2.0
 license-file:   LICENSE
+build-type:     Simple
 tested-with:
     GHC==8.10.4
-build-type:     Simple
 extra-source-files:
     README.md
 
@@ -143,9 +143,9 @@ library
     , envy
     , flow
     , http-media
-    , ip
     , lens
     , monad-logger
+    , network-ip
     , regex-compat
     , rio
     , servant
@@ -220,10 +220,10 @@ test-suite fission-doctest
     , envy
     , flow
     , http-media
-    , ip
     , lens
     , lens-aeson
     , monad-logger
+    , network-ip
     , regex-compat
     , rio
     , servant

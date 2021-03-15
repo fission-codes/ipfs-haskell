@@ -9,7 +9,8 @@ module Network.IPFS.Peer
 import qualified RIO.List                   as List
 import qualified RIO.Text                   as Text
 
-import qualified Net.IPv4                   as IPv4
+import qualified Network.IP.Addr            as Addr
+
 import           Text.Regex
 
 import qualified Network.IPFS.Internal.UTF8 as UTF8
@@ -22,34 +23,23 @@ import           Network.IPFS.Peer.Types
 import qualified Network.IPFS.Process.Error as Process
 import qualified Network.IPFS.Types         as IPFS
 
-all ::
-  MonadLocalIPFS m
-  => m (Either IPFS.Peer.Error [IPFS.Peer])
+all :: MonadLocalIPFS m => m (Either IPFS.Peer.Error [IPFS.Peer])
 all = rawList <&> \case
   Right raw -> case UTF8.encode raw of
     Left  _    -> Left  . DecodeFailure $ show raw
     Right text -> Right $ IPFS.Peer <$> Text.lines text
   Left err -> Left . UnknownErr $ UTF8.textShow err
 
-rawList ::
-  MonadLocalIPFS m
-  => m (Either Process.Error Process.RawMessage)
+rawList :: MonadLocalIPFS m => m (Either Process.Error Process.RawMessage)
 rawList = IPFS.runLocal ["bootstrap", "list"] ""
 
-connect ::
-  MonadLocalIPFS m
-  => Peer
-  -> m (Either IPFS.Peer.Error ())
+connect :: MonadLocalIPFS m => Peer -> m (Either IPFS.Peer.Error ())
 connect peer@(Peer peerID) = IPFS.runLocal ["swarm", "connect"] (UTF8.textToLazyBS peerID) >>= pure . \case
   Left _  -> Left $ CannotConnect peer
   Right _ -> Right ()
 
-connectRetry ::
-  MonadLocalIPFS m
-  => Peer
-  -> Int
-  -> m (Either IPFS.Peer.Error ())
-connectRetry peer (-1) = return . Left <| CannotConnect peer
+connectRetry :: MonadLocalIPFS m => Peer -> Natural -> m (Either IPFS.Peer.Error ())
+connectRetry peer 0 = return . Left $ CannotConnect peer
 connectRetry peer tries = connect peer >>= \case
   Right _   -> return $ Right ()
   Left _err -> connectRetry peer (tries - 1)
@@ -68,22 +58,23 @@ isExternalIPv4 ip = maybe False not isReserved
     isReserved :: Maybe Bool
     isReserved = do
       ipAddress  <- extractIPfromPeerAddress $ Text.unpack ip
-      normalized <- IPv4.decode $ Text.pack ipAddress
-      return $ IPv4.reserved normalized
+      normalized <- readMaybe ipAddress
+      return (Addr.ip4Range normalized == Addr.ReservedIP4)
 
 -- | Filter a list of peers to include only the externally accessable addresses
 filterExternalPeers :: [Peer] -> [Peer]
 filterExternalPeers = filter (isExternalIPv4 . peer)
 
 -- | Get all external ipfs peer addresses
-getExternalAddress ::
-  MonadLocalIPFS m
-  => m (Either IPFS.Peer.Error [Peer])
-getExternalAddress = IPFS.runLocal ["id"] "" >>= \case
-  Left err -> return . Left . UnknownErr $ UTF8.textShow err
-  Right raw ->
-    raw
-      |> decode
-      |> maybe [] addresses
-      |> Right . filterExternalPeers
-      |> pure
+getExternalAddress :: MonadLocalIPFS m => m (Either IPFS.Peer.Error [Peer])
+getExternalAddress =
+  IPFS.runLocal ["id"] "" >>= \case
+    Left err ->
+      return . Left . UnknownErr $ UTF8.textShow err
+
+    Right raw ->
+      raw
+        |> decode
+        |> maybe [] addresses
+        |> Right . filterExternalPeers
+        |> pure
