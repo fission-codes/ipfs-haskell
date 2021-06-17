@@ -9,8 +9,10 @@ module Network.IPFS.Client
   ) where
 
 import qualified RIO.ByteString.Lazy                             as Lazy
+
 import           Servant
 import           Servant.Client
+import           Servant.Multipart.Client                        ()
 
 import           Network.IPFS.Internal.Orphanage.ByteString.Lazy ()
 import           Network.IPFS.Prelude                            hiding (object)

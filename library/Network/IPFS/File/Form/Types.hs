@@ -4,6 +4,7 @@ import           RIO
 import qualified RIO.ByteString.Lazy     as Lazy
 
 import           Servant.Multipart
+import           Servant.Multipart.API
 
 import qualified Network.IPFS.File.Types as File
 
