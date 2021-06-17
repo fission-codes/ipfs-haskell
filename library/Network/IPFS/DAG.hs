@@ -9,7 +9,7 @@ import qualified Network.IPFS.Internal.UTF8        as UTF8
 import qualified RIO.ByteString.Lazy               as Lazy
 
 import           Servant.Client
-import qualified Servant.Multipart                 as Multipart
+import qualified Servant.Multipart.Client          as Multipart.Client
 
 import           Network.IPFS.Prelude
 
@@ -46,5 +46,5 @@ putNode node = put $ encode node
 
 putRemote :: MonadRemoteIPFS m => File.Serialized -> m (Either ClientError DAG.Put.Response)
 putRemote file = do
-  boundary  <- liftIO Multipart.genBoundary
+  boundary  <- liftIO Multipart.Client.genBoundary
   runRemote (IPFS.Client.dagPut True (boundary, File.Form "file" file))
