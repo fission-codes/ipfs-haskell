@@ -1,4 +1,4 @@
-name: 🧪 Tests (Native)
+name: 🏺 Artifacts (Native)
 
 # Trigger the workflow on push or pull request, but only for the main branch
 on:
@@ -36,8 +36,24 @@ jobs:
       name: 🗄️  Cache ~/.stack
       with:
         path: ~/.stack
-        key: ${{ matrix.os }}-${{ matrix.ghc }}-stack-ci-2
+        key: ${{ matrix.os }}-${{ matrix.ghc }}-stack-native-4
 
-    - name: 🧪 Test
+    - name: 📦 Install dependencies
       run: |
-        stack test --no-nix
+        stack build --no-nix --only-dependencies
+
+    - name: 🏗️  Build
+      run: |
+           stack build --no-nix
+
+    - name: 🏺 Upload CLI Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: fission-cli-${{ matrix.os }}
+        path: ./.stack-work/**/bin/fission
+
+    - name: 🏺 Upload Server Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: fission-server-${{ matrix.os }}
+        path: ./.stack-work/**/bin/fission-server

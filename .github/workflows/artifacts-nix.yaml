@@ -1,4 +1,4 @@
-name: 🧪 Tests (Nix)
+name: 🏺 Artifacts (Nix)
 
 # Trigger the workflow on push or pull request, but only for the main branch
 on:
@@ -30,8 +30,20 @@ jobs:
       name: 🗄️  Cache ~/.stack
       with:
         path: ~/.stack
-        key: ${{ matrix.os }}-stack-nix-ci-4
+        key: ${{ matrix.os }}-stack-nix-4
 
-    - name: 🧪 Test
+    - name: 🏗️  Build
       run: |
-        nix-shell --command quality
+        nix-shell --command build
+
+    - name: 🏺 Upload CLI Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: fission-cli-${{ matrix.os }}-nix
+        path: ./.stack-work/**/*-nix/**/bin/fission
+
+    - name: 🏺 Upload Server Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: fission-server-${{ matrix.os }}-nix
+        path: ./.stack-work/**/*-nix/**/bin/fission-server
