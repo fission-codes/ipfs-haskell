@@ -93,9 +93,11 @@ addDir ::
   -> FilePath
   -> m (Either IPFS.Add.Error IPFS.CID)
 addDir ignored path =
-  doesFileExist path >>= \case
-    True  -> addPath path
-    False -> walkDir ignored path
+  doesFileExist path' >>= \case
+    True  -> addPath path'
+    False -> walkDir ignored path'
+  where
+    path' = Path.escape path
 
 walkDir ::
   ( MonadIO m
