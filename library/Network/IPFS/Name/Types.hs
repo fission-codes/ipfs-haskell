@@ -1,11 +1,11 @@
 module Network.IPFS.Name.Types (Name (..)) where
 
-import qualified RIO.Text as Text
+import qualified RIO.Text             as Text
 
-import Servant
-import Data.Swagger (ToParamSchema, ToSchema (..))
+import           Data.Swagger         (ToParamSchema, ToSchema (..))
+import           Servant
 
-import Network.IPFS.Prelude
+import           Network.IPFS.Prelude
 
 newtype Name = Name { unName :: String }
   deriving          ( Eq
@@ -30,4 +30,4 @@ instance FromJSON Name where
 instance FromHttpApiData Name where
   parseUrlPiece = \case
     ""  -> Left "Empty Name field"
-    txt -> Right . Name <| Text.unpack txt
+    txt -> Right . Name $ Text.unpack txt

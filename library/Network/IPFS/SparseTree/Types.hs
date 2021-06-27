@@ -3,17 +3,17 @@ module Network.IPFS.SparseTree.Types
   , Tag (..)
   ) where
 
-import qualified RIO.HashMap as HashMap
-import qualified RIO.Map     as Map
-import qualified RIO.Text    as Text
+import qualified RIO.HashMap                as HashMap
+import qualified RIO.Map                    as Map
+import qualified RIO.Text                   as Text
 
-import Data.Swagger hiding (Tag, name)
-import Servant
+import           Data.Swagger               hiding (Tag, name)
+import           Servant
 
-import           Network.IPFS.Prelude
-import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Network.IPFS.CID.Types
+import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Network.IPFS.Name.Types
+import           Network.IPFS.Prelude
 
 -- | Directory structure for CIDs and other identifiers
 --
@@ -55,9 +55,9 @@ instance Display SparseTree where
 
 instance ToJSON SparseTree where
   toJSON = \case
-    Stub (Name name)  -> String <| Text.pack name
-    Content (CID cid) -> String <| UTF8.stripN 1 cid
-    Directory dirMap  -> Object <| HashMap.fromList (jsonKV <$> Map.toList dirMap)
+    Stub (Name name)  -> String $ Text.pack name
+    Content (CID cid) -> String $ UTF8.stripN 1 cid
+    Directory dirMap  -> Object $ HashMap.fromList (jsonKV <$> Map.toList dirMap)
     where
       jsonKV :: (Tag, SparseTree) -> (Text, Value)
       jsonKV (tag, subtree) = (jsonTag tag, toJSON subtree)

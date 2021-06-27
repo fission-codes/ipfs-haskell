@@ -5,9 +5,6 @@ module Network.IPFS.Add
   , addDir
   ) where
 
-import           Network.IPFS.Local.Class    as IPFS
-import           Network.IPFS.Prelude        hiding (link)
-
 import           Data.ByteString.Lazy.Char8  as CL
 
 import qualified System.FilePath.Glob        as Glob
@@ -17,7 +14,11 @@ import           RIO.Directory
 import           RIO.FilePath
 import qualified RIO.List                    as List
 
+import           Network.IPFS.Local.Class    as IPFS
+import           Network.IPFS.Prelude        hiding (link)
+
 import qualified Network.IPFS.Internal.UTF8  as UTF8
+import qualified Network.IPFS.Path.Escaped   as Path
 
 import           Network.IPFS.Add.Error      as IPFS.Add
 import           Network.IPFS.DAG.Link       as DAG.Link
@@ -26,10 +27,7 @@ import           Network.IPFS.Types          as IPFS
 
 import           Network.IPFS.DAG            as DAG
 
-addRaw ::
-  MonadLocalIPFS m
-  => Lazy.ByteString
-  -> m (Either IPFS.Add.Error IPFS.CID)
+addRaw :: MonadLocalIPFS m => Lazy.ByteString -> m (Either IPFS.Add.Error IPFS.CID)
 addRaw raw =
   IPFS.runLocal ["add", "-HQ"] raw >>= \case
     Right result ->
@@ -76,18 +74,16 @@ addFile raw name =
              , unName name
              ]
 
-addPath ::
-  MonadLocalIPFS m
-  => FilePath
-  -> m (Either IPFS.Add.Error CID)
-addPath path = IPFS.runLocal ["add", "-HQ", path] "" >>= pure . \case
-  Right result ->
-    case CL.lines result of
-      [cid] -> Right . mkCID . UTF8.stripN 1 $ UTF8.textShow cid
-      bad   -> Left . UnexpectedOutput $ UTF8.textShow bad
+addPath :: MonadLocalIPFS m => FilePath -> m (Either IPFS.Add.Error CID)
+addPath path =
+  IPFS.runLocal ["add", "-HQ", Path.escape path] "" >>= \case
+    Right result ->
+      case CL.lines result of
+        [cid] -> return . Right . mkCID . UTF8.stripN 1 $ UTF8.textShow cid
+        bad   -> return . Left . UnexpectedOutput $ UTF8.textShow bad
 
-  Left err ->
-    Left . UnknownAddErr $ UTF8.textShow err
+    Left err ->
+      return . Left . UnknownAddErr $ UTF8.textShow err
 
 addDir ::
   ( MonadIO m
@@ -96,9 +92,10 @@ addDir ::
   => IPFS.Ignored
   -> FilePath
   -> m (Either IPFS.Add.Error IPFS.CID)
-addDir ignored path = doesFileExist path >>= \case
-  True  -> addPath path
-  False -> walkDir ignored path
+addDir ignored path =
+  doesFileExist path >>= \case
+    True  -> addPath path
+    False -> walkDir ignored path
 
 walkDir ::
   ( MonadIO m
@@ -134,15 +131,19 @@ foldResults ::
 foldResults _ _ (Left err) _ = return $ Left err
 foldResults path ignored (Right node) filename = do
   addDir ignored (path </> filename) >>= \case
-    Left err ->  return $ Left err
+    Left err ->
+      return $ Left err
+
     Right cid ->
       DAG.Link.create cid (IPFS.Name filename) >>= \case
-      Left err -> return . Left $ RecursiveAddErr err
-      Right link ->
-        return $ Right node { links = link: links node }
+        Left err ->
+          return . Left $ RecursiveAddErr err
+
+        Right link ->
+          return $ Right node { links = link : links node }
 
 removeIgnored :: IPFS.Ignored -> [FilePath] -> [FilePath]
-removeIgnored ignored files = List.filter (not . matchesAny ignored) files
+removeIgnored ignored = List.filter (not . matchesAny ignored)
 
 matchesAny :: IPFS.Ignored -> FilePath -> Bool
-matchesAny globs path = List.any (\x -> Glob.match x path) globs
+matchesAny globs path = List.any (`Glob.match` path) globs
