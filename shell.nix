@@ -1,60 +1,50 @@
-let
-  sources  = import ./nix/sources.nix;
-  commands = import ./nix/commands.nix;
+{ rosetta ? false }:
+  let
+    sources  = import ./nix/sources.nix;
+    commands = import ./nix/commands.nix;
 
-  nixos    = import sources.nixpkgs  {};
-  darwin   = import sources.darwin   {};
-  unstable = import sources.unstable {};
+    overrides = if rosetta then { system = "x86_64-darwin"; } else {};
 
-  pkgs  = if darwin.stdenv.isDarwin then darwin else nixos;
-  tasks = commands {
-    inherit pkgs;
-    inherit unstable;
-  };
+    nixos    = import sources.nixos    overrides;
+    darwin   = import sources.darwin   overrides;
+    unstable = import sources.unstable overrides;
 
-  ghc = unstable.ghc;
+    pkgs  = if darwin.stdenv.isDarwin then darwin else nixos;
+    tasks = commands {
+      inherit pkgs;
+      inherit unstable;
+    };
 
-  deps = {
-    common = [ 
-      pkgs.gnumake
-      unstable.niv
+    ghc = unstable.ghc;
+
+    deps = {
+      common = [
+        unstable.niv
+      ];
+
+      data = [
+        pkgs.ipfs
+        pkgs.zlib.dev
+      ];
+
+      haskell = [
+        unstable.stack
+        unstable.stylish-haskell
+      ];
+    };
+  in
+
+  unstable.haskell.lib.buildStackProject {
+    inherit ghc;
+    name = "Fisson";
+    nativeBuildInputs = builtins.concatLists [
+      deps.common
+      deps.data
+      deps.haskell
+      tasks
     ];
 
-    data = [
-      pkgs.ipfs
-      pkgs.zlib.dev
-      pkgs.zlib.out
-    ];
-
-    haskell = [
-      unstable.ghcid
-      unstable.ghc
-      unstable.stack
-      unstable.stylish-haskell
-      unstable.haskellPackages.hie-bios
-      unstable.haskell-language-server
-      unstable.haskellPackages.implicit-hie
-    ];
-
-    fun = [
-      pkgs.figlet
-      pkgs.lolcat
-    ];
-  };
-in
-
-unstable.haskell.lib.buildStackProject {
-  inherit ghc;
-  name = "Fisson";
-  nativeBuildInputs = builtins.concatLists [
-    deps.common
-    deps.data
-    deps.haskell 
-    deps.fun
-    tasks
-  ];
-
-  shellHook = ''
-    export LANG=C.UTF8
-  '';
-}
+    shellHook = ''
+      export LANG=C.UTF8
+    '';
+  }

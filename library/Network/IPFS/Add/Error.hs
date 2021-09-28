@@ -1,7 +1,7 @@
 module Network.IPFS.Add.Error (Error (..)) where
 
-import           Network.IPFS.Prelude
 import qualified Network.IPFS.Get.Error as Get
+import           Network.IPFS.Prelude
 
 data Error
   = InvalidFile
@@ -13,7 +13,6 @@ data Error
            , Eq
            , Generic
            , Show
-           , ToJSON
            )
 
 instance Display Error where

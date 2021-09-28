@@ -17,7 +17,6 @@ data Error
            , Eq
            , Generic
            , Show
-           , ToJSON
            )
 
 -- NOTE Will not stay as a newtype in the long term
