@@ -41,7 +41,7 @@ type V0API = "add"    :> Add.API
         :<|> "pin"    :> Pin.API
 
 cat    :: CID                                         -> ClientM File.Serialized
-stat   :: CID                                         -> ClientM Stat
+stat   :: CID                                         -> ClientM (Either OverflowDetected Stat)
 pin    :: CID                                         -> ClientM Pin.Response
 unpin  :: CID -> Bool                                 -> ClientM Pin.Response
 dagPut ::        Bool -> (Lazy.ByteString, File.Form) -> ClientM DAG.Put.Response

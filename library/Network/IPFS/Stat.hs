@@ -19,20 +19,27 @@ import           Network.IPFS.Get.Error     as IPFS.Get
 import qualified Network.IPFS.Process.Error as Process
 
 import           Network.IPFS.Bytes.Types
+import qualified Network.IPFS.Remote.Error  as Remote
 import           Network.IPFS.Stat.Types
 import           Network.IPFS.Types         as IPFS
 
 getStatRemote :: MonadRemoteIPFS m => IPFS.CID -> m (Either IPFS.Get.Error Stat)
 getStatRemote cid =
   Remote.ipfsStat cid >>= \case
-    Left err   -> return . Left . UnexpectedOutput $ UTF8.textShow err
-    Right stat -> return $ Right stat
+    Right statPayload           -> return $ Right statPayload
+    Left (Remote.WebError err)  -> return . Left $ IPFS.Get.WebError err
+    Left (Remote.SizeError err) -> return . Left $ IPFS.Get.SizeError err
 
 getSizeRemote :: MonadRemoteIPFS m => IPFS.CID -> m (Either IPFS.Get.Error Bytes)
 getSizeRemote cid =
   getStatRemote cid >>= \case
-    Left err   -> return $ Left err
-    Right stat -> return . Right $ cumulativeSize stat
+    Left err ->
+      return $ Left err
+
+    Right Stat {cumulativeSize} ->
+      case cumulativeSize of
+        Left err   -> return $ Left $ IPFS.Get.SizeError err
+        Right size -> return $ Right size
 
 getSize :: MonadLocalIPFS m => IPFS.CID -> m (Either IPFS.Get.Error Integer)
 getSize cid@(CID hash) = IPFS.runLocal ["object", "stat"] (Lazy.fromStrict <| encodeUtf8 hash) >>= \case
