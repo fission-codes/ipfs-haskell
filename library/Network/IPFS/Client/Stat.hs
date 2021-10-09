@@ -1,6 +1,6 @@
 module Network.IPFS.Client.Stat (API) where
 
-import           Servant
+import           Servant.API
 
 import           Network.IPFS.Prelude
 

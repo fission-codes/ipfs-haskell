@@ -10,7 +10,7 @@ module Network.IPFS.Client
 
 import qualified RIO.ByteString.Lazy                             as Lazy
 
-import           Servant
+import           Servant.API
 import           Servant.Client
 import           Servant.Multipart.Client                        ()
 

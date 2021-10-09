@@ -1,11 +1,11 @@
 module Network.IPFS.Peer.Types (Peer (..)) where
 
-import RIO
+import           RIO
 
-import Control.Lens
-import Data.Aeson
-import Data.Swagger
-import Servant
+import           Control.Lens
+import           Data.Aeson
+import           Data.Swagger
+import           Servant.API
 
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 
