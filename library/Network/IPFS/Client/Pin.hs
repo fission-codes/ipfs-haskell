@@ -7,7 +7,7 @@ module Network.IPFS.Client.Pin
 
 import qualified RIO.Text                  as Text
 
-import           Servant
+import           Servant.API
 
 import           Network.IPFS.Prelude
 

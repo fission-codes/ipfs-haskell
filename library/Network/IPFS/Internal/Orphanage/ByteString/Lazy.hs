@@ -2,8 +2,8 @@
 
 module Network.IPFS.Internal.Orphanage.ByteString.Lazy () where
 
-import qualified RIO.ByteString.Lazy as Lazy
-import           Servant
+import qualified RIO.ByteString.Lazy  as Lazy
+import           Servant.API
 
 import           Network.IPFS.Prelude
 

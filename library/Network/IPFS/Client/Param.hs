@@ -3,7 +3,7 @@ module Network.IPFS.Client.Param
   , IsRecursive
   ) where
 
-import           Servant
+import           Servant.API
 
 import           Network.IPFS.CID.Types
 

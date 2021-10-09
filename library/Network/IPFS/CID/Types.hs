@@ -3,12 +3,12 @@ module Network.IPFS.CID.Types
   , mkCID
   ) where
 
-import qualified RIO.ByteString.Lazy as Lazy
+import qualified RIO.ByteString.Lazy        as Lazy
 import           RIO.Char
-import qualified RIO.Text            as Text
+import qualified RIO.Text                   as Text
 
-import Data.Swagger
-import Servant
+import           Data.Swagger
+import           Servant.API
 
 import qualified Network.IPFS.Internal.UTF8 as UTF8
 import           Network.IPFS.Prelude

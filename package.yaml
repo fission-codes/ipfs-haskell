@@ -97,7 +97,6 @@ dependencies:
   - servant-multipart
   - servant-multipart-api
   - servant-multipart-client
-  - servant-server
   - swagger2
   - text
   - vector
