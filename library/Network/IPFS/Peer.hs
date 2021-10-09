@@ -3,6 +3,7 @@ module Network.IPFS.Peer
   , rawList
   , connect
   , connectRetry
+  , disconnect
   , getExternalAddress
   ) where
 
@@ -37,6 +38,12 @@ connect :: MonadLocalIPFS m => Peer -> m (Either IPFS.Peer.Error ())
 connect peer@(Peer peerID) = IPFS.runLocal ["swarm", "connect"] (UTF8.textToLazyBS peerID) >>= pure . \case
   Left _  -> Left $ CannotConnect peer
   Right _ -> Right ()
+
+disconnect :: MonadLocalIPFS m => Peer -> m (Either IPFS.Peer.Error ())
+disconnect peer@(Peer peerID) =
+  IPFS.runLocal ["swarm", "disconnect"] (UTF8.textToLazyBS peerID) >>= pure . \case
+    Left _  -> Left $ CannotDisconnect peer
+    Right _ -> Right ()
 
 connectRetry :: MonadLocalIPFS m => Peer -> Natural -> m (Either IPFS.Peer.Error ())
 connectRetry peer 0 = return . Left $ CannotConnect peer

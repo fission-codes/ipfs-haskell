@@ -1,11 +1,12 @@
 module Network.IPFS.Peer.Error (Error (..)) where
 
-import Network.IPFS.Prelude
-import Network.IPFS.Peer.Types
+import           Network.IPFS.Peer.Types
+import           Network.IPFS.Prelude
 
 data Error
-  = DecodeFailure String
-  | CannotConnect Peer
+  = DecodeFailure    String
+  | CannotConnect    Peer
+  | CannotDisconnect Peer
   | UnknownErr Text
   deriving ( Exception
            , Eq
