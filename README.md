@@ -1,3 +1,7 @@
+Moved inside the https://github.com/fission-suite/fission repo (still a separate package)
+
+---
+
 # ipfs-haskell
 
 [![Build Status](https://travis-ci.org/fission-suite/PROJECTNAME.svg?branch=master)](https://travis-ci.org/fission-suite/ipfs-haskell)
