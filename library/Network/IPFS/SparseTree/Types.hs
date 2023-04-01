@@ -3,7 +3,8 @@ module Network.IPFS.SparseTree.Types
   , Tag (..)
   ) where
 
-import qualified RIO.HashMap                as HashMap
+import qualified Data.Aeson.KeyMap          as Aeson.KeyMap
+import qualified Data.Aeson.Key             as Aeson.Key
 import qualified RIO.Map                    as Map
 import qualified RIO.Text                   as Text
 
@@ -57,13 +58,13 @@ instance ToJSON SparseTree where
   toJSON = \case
     Stub (Name name)  -> String <| Text.pack name
     Content (CID cid) -> String <| UTF8.stripN 1 cid
-    Directory dirMap  -> Object <| HashMap.fromList (jsonKV <$> Map.toList dirMap)
+    Directory dirMap  -> Object <| Aeson.KeyMap.fromList (jsonKV <$> Map.toList dirMap)
     where
-      jsonKV :: (Tag, SparseTree) -> (Text, Value)
+      jsonKV :: (Tag, SparseTree) -> (Aeson.Key.Key, Value)
       jsonKV (tag, subtree) = (jsonTag tag, toJSON subtree)
 
-      jsonTag (Key (Name n))   = Text.pack n
-      jsonTag (Hash (CID cid)) = UTF8.stripN 1 cid
+      jsonTag (Key (Name n))   = Aeson.Key.fromText (Text.pack n)
+      jsonTag (Hash (CID cid)) = Aeson.Key.fromText (UTF8.stripN 1 cid)
 
 data Tag
   = Key Name
