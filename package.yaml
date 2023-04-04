@@ -13,11 +13,11 @@ maintainer:
   - daniel@fission.codes
   - steven@fission.codes
   - james@fission.codes
-copyright: © 2021 Fission Internet Software Services for Open Networks Inc.
+copyright: © 2023 Fission Internet Software Services for Open Networks Inc.
 license: Apache-2.0
 license-file: LICENSE
 github: fission-suite/ipfs-haskell
-tested-with: GHC==8.10.7
+tested-with: GHC==9.2.7
 extra-source-files:
   - README.md
 

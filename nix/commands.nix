@@ -1,7 +1,7 @@
-{ pkgs, unstable, ... }:
+{ pkgs, ... }:
   let
     bash  = "${pkgs.bash}/bin/bash";
-    stack = "${unstable.stack}/bin/stack";
+    stack = "${pkgs.stack}/bin/stack";
 
     cmd = description: script:
       { inherit description;
